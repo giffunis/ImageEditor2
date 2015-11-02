@@ -17,6 +17,7 @@ public class JToolBar2 extends JToolBar{
 			this.api = api;
 			initAbrir();
 			initGuardar();
+			initEscalaGrises();
 		}
 		
 		// function to create a Button
@@ -67,5 +68,21 @@ public class JToolBar2 extends JToolBar{
 		private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {
 			api.imagenes.get(getImageFromInternalFrame()).guardarImagen();
 		}
+		
+//----------------------------------------SAVE------------------------------------------
+		void initEscalaGrises(){
+			createBtn("Escala de grises","src/Images/EscalaGrises.png");
+			btnItem.addActionListener(new java.awt.event.ActionListener() {
+	            public void actionPerformed(java.awt.event.ActionEvent evt) {
+	                btnEscalaGrisesActionPerformed(evt);
+	            }
+	        });
+			add(btnItem);
+		}
+		
+		private void btnEscalaGrisesActionPerformed(java.awt.event.ActionEvent evt) {
+			api.imagenes.get(getImageFromInternalFrame()).escalaGrises();
+		}
+		
 		
 }

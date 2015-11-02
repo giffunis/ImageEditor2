@@ -24,6 +24,10 @@ public class Imagenes{
 	public Imagenes(ImageEditor2 api){
 		this.api = api;
 	}
+	public Imagenes(ImageEditor2 api, BufferedImage imagen){
+		this.api = api;
+		this.imagenReal = imagen;
+	}
 	
 	void init_internalFrame(){
 		internalFrame = new JInternalFrame("imagen"+(api.imagenes.size() + 1) ,true,true,true,true);
@@ -48,8 +52,12 @@ public class Imagenes{
 		this.api.imagenes.addElement(this);
 	}
 	
-	
-	
+	BufferedImage deepCopy(BufferedImage bi) {
+        ColorModel cm = bi.getColorModel();
+        boolean isAlphaPremultiplied = cm.isAlphaPremultiplied();
+        WritableRaster raster = bi.copyData(null);
+        return new BufferedImage(cm, raster, isAlphaPremultiplied, null);
+    }
 	
 	public void abrirImagen(){	
         BufferedImage auxImage = null;
@@ -127,4 +135,26 @@ public class Imagenes{
             }          
         }  	
     }
+	
+	public void escalaGrises(){
+		BufferedImage outImage = deepCopy(this.imagenReal);
+        int media;
+        Color colorAux;
+                 
+        for( int i = 0; i < outImage.getWidth(); i++ ){
+            for( int j = 0; j < outImage.getHeight(); j++ ){
+                //Almacenamos el color del píxel
+                colorAux=new Color(outImage.getRGB(i, j));
+                //Calculamos la media de los tres canales (rojo, verde, azul)
+                media =(int)(0.222*colorAux.getRed()+0.707*colorAux.getGreen()+0.071*colorAux.getBlue());
+                colorAux = new Color(media,media,media);
+                //Asignamos el nuevo valor al BufferedImage
+                outImage.setRGB(i, j,colorAux.getRGB());
+            }
+        }
+        Imagenes newImagen = new Imagenes(this.api,outImage);
+        newImagen.empaquetarImagen();
+    }
+	
+	
 }
