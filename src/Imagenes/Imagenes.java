@@ -3,9 +3,14 @@ package Imagenes;
 import java.awt.*;
 import java.awt.image.*;
 import java.io.File;
+import java.util.Vector;
+
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
+
+import org.jfree.chart.ChartPanel;
+
 import javax.swing.filechooser.FileFilter;
 
 
@@ -14,6 +19,9 @@ import ImageEditor2.*;
 
 public class Imagenes{
 	
+	static final int SIZE = 256;
+	static final String HISTO_ABSO = "Histograma Absoluto";
+	static final String HISTO_ACUM = "Histograma Acumulativo";
 	JPanel panel;
 	public BufferedImage imagenReal;
 	ImageEditor2 api;
@@ -156,5 +164,36 @@ public class Imagenes{
         newImagen.empaquetarImagen();
     }
 	
+	public Vector<Integer> histogramaAbsoluto(){  
+    	Vector<Integer> hist = new Vector<Integer>(0);
+    	Color aux;
+    	// Inicializamos el vector o tabla.
+    	for(int i = 0; i < SIZE; i++)
+    		hist.addElement(0);
+    	
+    	for( int i = 0; i < imagenReal.getWidth(); i++ )
+            for( int j = 0; j < imagenReal.getHeight(); j++ ){
+                aux = new Color(this.imagenReal.getRGB(i, j));
+                hist.set(aux.getRed(),hist.get(aux.getRed()) + 1);
+            }
+    	return hist;
+    }
+	
+	public void createGraphic(String name, Vector<Integer> vectorHist){
+		Histograma histo = new Histograma(name,vectorHist);
+		ChartPanel panel = new ChartPanel(histo.grafica);
+		JInternalFrame ventana = new JInternalFrame(name,true,true,true,true);
+		ventana.setDefaultCloseOperation(JInternalFrame.DISPOSE_ON_CLOSE);
+		ventana.add(panel);
+		ventana.pack();
+		ventana.setVisible(true);
+		this.api.desktopPane.add(ventana);
+	}
+	
+	public void graficaHistogramaAbsoluto(int pos){
+		Vector<Integer> vectorHist = histogramaAbsoluto();
+		createGraphic(HISTO_ABSO + ": imagen " + (pos + 1),vectorHist);
+		
+	}
 	
 }

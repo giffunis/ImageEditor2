@@ -9,23 +9,19 @@ import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.data.category.DefaultCategoryDataset;
 
-import ImageEditor2.ImageEditor2;
 
 @SuppressWarnings("serial")
 public class Histograma extends JInternalFrame {
 
-	ImageEditor2 api;
 	String nombre;
 	Vector<Integer> hist;
 	public JFreeChart grafica;
 	DefaultCategoryDataset datos = new DefaultCategoryDataset();
 	
-	public Histograma(ImageEditor2 api, String nombre_histo, Vector<Integer> hist){
-		this.api = api;
+	public Histograma(String nombre_histo, Vector<Integer> hist){
 		this.nombre = nombre_histo;
 		this.hist = hist;
 		initComponents();
-		//JOptionPane.showMessageDialog(new JFrame(), nombre_histo);
 	}
 	
 	void initComponents(){

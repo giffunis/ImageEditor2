@@ -7,9 +7,6 @@ import Imagenes.Imagenes;
 @SuppressWarnings("serial")
 public class JToolBar2 extends JToolBar{
 		
-		static final String HISTO_ABSO = "Histograma Absoluto";
-		static final String HISTO_ACUM = "Histograma Acumulativo";
-		
 		ImageEditor2 api;
 		JButton btnItem;
 		
@@ -18,6 +15,7 @@ public class JToolBar2 extends JToolBar{
 			initAbrir();
 			initGuardar();
 			initEscalaGrises();
+			initHistogramaAbsoluto();
 		}
 		
 		// function to create a Button
@@ -82,6 +80,22 @@ public class JToolBar2 extends JToolBar{
 		
 		private void btnEscalaGrisesActionPerformed(java.awt.event.ActionEvent evt) {
 			api.imagenes.get(getImageFromInternalFrame()).escalaGrises();
+		}
+
+//----------------------------------------HISTOGRAMA ABSOLUTO------------------------------------------
+		void initHistogramaAbsoluto(){
+			createBtn("Histograma absoluto","src/Images/histogram2.png");
+			btnItem.addActionListener(new java.awt.event.ActionListener() {
+	            public void actionPerformed(java.awt.event.ActionEvent evt) {
+	                btnHistogramaAbsolutoActionPerformed(evt);
+	            }
+	        });
+			add(btnItem);
+		}
+		
+		private void btnHistogramaAbsolutoActionPerformed(java.awt.event.ActionEvent evt) {
+			int pos = getImageFromInternalFrame();
+			api.imagenes.get(pos).graficaHistogramaAbsoluto(pos);
 		}
 		
 		
