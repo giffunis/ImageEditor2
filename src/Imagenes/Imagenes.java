@@ -21,7 +21,7 @@ public class Imagenes{
 	
 	static final int SIZE = 256;
 	static final String HISTO_ABSO = "Histograma Absoluto";
-	static final String HISTO_ACUM = "Histograma Acumulativo";
+	static final String HISTO_ACUM = "Histograma Acumulado";
 	JPanel panel;
 	public BufferedImage imagenReal;
 	ImageEditor2 api;
@@ -192,8 +192,17 @@ public class Imagenes{
 	
 	public void graficaHistogramaAbsoluto(int pos){
 		Vector<Integer> vectorHist = histogramaAbsoluto();
-		createGraphic(HISTO_ABSO + ": imagen " + (pos + 1),vectorHist);
-		
+		createGraphic(HISTO_ABSO + ": imagen " + (pos + 1),vectorHist);	
+	}
+	
+	public void graficaHistogramaAcumulado(int pos){
+		Vector<Integer> vectorHist = histogramaAbsoluto();
+		Vector<Integer> vectorAcum = new Vector<Integer>(0);
+    	
+		vectorAcum.addElement(vectorHist.get(0));
+    	for(int i = 1; i< vectorHist.size(); i++)
+    		vectorAcum.addElement(vectorAcum.get(i - 1) + vectorHist.get(i));
+		createGraphic(HISTO_ACUM + ": imagen " + (pos + 1),vectorAcum);	
 	}
 	
 }

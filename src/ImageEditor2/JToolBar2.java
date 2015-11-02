@@ -16,6 +16,7 @@ public class JToolBar2 extends JToolBar{
 			initGuardar();
 			initEscalaGrises();
 			initHistogramaAbsoluto();
+			initHistogramaAcumulado();
 		}
 		
 		// function to create a Button
@@ -97,6 +98,21 @@ public class JToolBar2 extends JToolBar{
 			int pos = getImageFromInternalFrame();
 			api.imagenes.get(pos).graficaHistogramaAbsoluto(pos);
 		}
+
+//----------------------------------------HISTOGRAMA ACUMULADO------------------------------------------
+		void initHistogramaAcumulado(){
+			createBtn("Histograma acumulado","src/Images/histogram1.png");
+			btnItem.addActionListener(new java.awt.event.ActionListener() {
+	            public void actionPerformed(java.awt.event.ActionEvent evt) {
+	                btnHistogramaAcumuladoActionPerformed(evt);
+	            }
+	        });
+			add(btnItem);
+		}
 		
+		private void btnHistogramaAcumuladoActionPerformed(java.awt.event.ActionEvent evt) {
+			int pos = getImageFromInternalFrame();
+			api.imagenes.get(pos).graficaHistogramaAcumulado(pos);
+		}
 		
 }
