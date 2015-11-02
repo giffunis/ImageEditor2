@@ -10,19 +10,17 @@ import Imagenes.Imagenes;
 
 public class ImageEditor2 {
 	JFrame framePrincipal;
-	JDesktopPane desktopPane;
+	public JDesktopPane desktopPane;
 	public Vector<Imagenes> imagenes;
 	//JMenuBar2 menuBar;
-	//JToolBar2 toolBar2;
+	JToolBar2 toolBar2;
 	
 	ImageEditor2(){
 		imagenes = new Vector<Imagenes>(0);
 		initFramePrincipal();
 		initDesktopPane();
-//		initToolBar2();
+		initToolBar2();
 //		initMenuBar2();
-		
-//		framePrincipal.add("North", barraBotonesPrincipal);	//	Añadimos barraPrincipal al framePrincipal
 //		framePrincipal.setJMenuBar(menuBar);
 
 	}
@@ -41,7 +39,8 @@ public class ImageEditor2 {
 	}
 	
 	void initToolBar2(){
-		
+		toolBar2 = new JToolBar2(this);
+		framePrincipal.add("North", toolBar2);
 	}
 	
 	void initMenuBar2(){
