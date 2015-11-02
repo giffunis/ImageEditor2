@@ -69,7 +69,7 @@ public class JToolBar2 extends JToolBar{
 			api.imagenes.get(getImageFromInternalFrame()).guardarImagen();
 		}
 		
-//----------------------------------------SAVE------------------------------------------
+//----------------------------------------ESCALA DE GRISES------------------------------------------
 		void initEscalaGrises(){
 			createBtn("Escala de grises","src/Images/EscalaGrises.png");
 			btnItem.addActionListener(new java.awt.event.ActionListener() {
