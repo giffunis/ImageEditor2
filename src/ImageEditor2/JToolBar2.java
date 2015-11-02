@@ -1,5 +1,7 @@
 package ImageEditor2;
 
+import java.net.URL;
+
 import javax.swing.*;
 
 import Imagenes.Imagenes;
@@ -28,6 +30,14 @@ public class JToolBar2 extends JToolBar{
 			btnItem.setIcon(new ImageIcon(imageRoute));	
 		}
 		
+		void createBtn(String name, URL imageRoute){
+			btnItem = new JButton();
+			btnItem.setName(name);
+			btnItem.setToolTipText(name);
+			btnItem.setSelected(false);
+			btnItem.setIcon(new ImageIcon(imageRoute));	
+		}
+		
 		int getImageFromInternalFrame(){
 			JInternalFrame internalFrame = api.desktopPane.getSelectedFrame();
 			String aux = internalFrame.getTitle();
@@ -40,7 +50,7 @@ public class JToolBar2 extends JToolBar{
 		}
 //---------------------------------------OPEN-----------------------------------------
 		void initAbrir(){
-			createBtn("Abrir","src/Images/open.png");
+			createBtn("Abrir",Thread.currentThread().getContextClassLoader().getResource("Images/open.png"));
 			btnItem.addActionListener(new java.awt.event.ActionListener() {
 	            public void actionPerformed(java.awt.event.ActionEvent evt) {
 	                btnAbrirActionPerformed(evt);
@@ -55,7 +65,7 @@ public class JToolBar2 extends JToolBar{
 		}
 //----------------------------------------SAVE------------------------------------------
 		void initGuardar(){
-			createBtn("Guardar","src/Images/save.png");
+			createBtn("Guardar",Thread.currentThread().getContextClassLoader().getResource("Images/save.png"));
 			btnItem.addActionListener(new java.awt.event.ActionListener() {
 	            public void actionPerformed(java.awt.event.ActionEvent evt) {
 	                btnGuardarActionPerformed(evt);
@@ -70,7 +80,7 @@ public class JToolBar2 extends JToolBar{
 		
 //----------------------------------------ESCALA DE GRISES------------------------------------------
 		void initEscalaGrises(){
-			createBtn("Escala de grises","src/Images/EscalaGrises.png");
+			createBtn("Escala de grises",Thread.currentThread().getContextClassLoader().getResource("Images/EscalaGrises.png"));
 			btnItem.addActionListener(new java.awt.event.ActionListener() {
 	            public void actionPerformed(java.awt.event.ActionEvent evt) {
 	                btnEscalaGrisesActionPerformed(evt);
@@ -85,7 +95,7 @@ public class JToolBar2 extends JToolBar{
 
 //----------------------------------------HISTOGRAMA ABSOLUTO------------------------------------------
 		void initHistogramaAbsoluto(){
-			createBtn("Histograma absoluto","src/Images/histogram2.png");
+			createBtn("Histograma absoluto",Thread.currentThread().getContextClassLoader().getResource("Images/histogram2.png"));
 			btnItem.addActionListener(new java.awt.event.ActionListener() {
 	            public void actionPerformed(java.awt.event.ActionEvent evt) {
 	                btnHistogramaAbsolutoActionPerformed(evt);
@@ -101,7 +111,7 @@ public class JToolBar2 extends JToolBar{
 
 //----------------------------------------HISTOGRAMA ACUMULADO------------------------------------------
 		void initHistogramaAcumulado(){
-			createBtn("Histograma acumulado","src/Images/histogram1.png");
+			createBtn("Histograma acumulado",Thread.currentThread().getContextClassLoader().getResource("Images/histogram1.png"));
 			btnItem.addActionListener(new java.awt.event.ActionListener() {
 	            public void actionPerformed(java.awt.event.ActionEvent evt) {
 	                btnHistogramaAcumuladoActionPerformed(evt);

@@ -9,6 +9,8 @@ import javax.swing.*;
 import Imagenes.Imagenes;
 
 public class ImageEditor2 {
+
+	
 	JFrame framePrincipal;
 	public JDesktopPane desktopPane;
 	public Vector<Imagenes> imagenes;
