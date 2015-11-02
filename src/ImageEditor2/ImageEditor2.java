@@ -1,16 +1,22 @@
 package ImageEditor2;
 
+// Generic class
 import java.awt.*;
+import java.util.*;
 import javax.swing.*;
+
+//	My class.
+import Imagenes.Imagenes;
 
 public class ImageEditor2 {
 	JFrame framePrincipal;
 	JDesktopPane desktopPane;
+	public Vector<Imagenes> imagenes;
 	//JMenuBar2 menuBar;
 	//JToolBar2 toolBar2;
 	
 	ImageEditor2(){
-		
+		imagenes = new Vector<Imagenes>(0);
 		initFramePrincipal();
 		initDesktopPane();
 //		initToolBar2();
