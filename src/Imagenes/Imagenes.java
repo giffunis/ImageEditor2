@@ -49,9 +49,10 @@ public class Imagenes{
 	
 	void init_panel(){
 		JLabel label = new JLabel();
-		label.setIcon(new ImageIcon(imagenReal));
+		label.setIcon(new ImageIcon(imagenReal,BorderLayout.CENTER));
 		panel = new JPanel();
-		panel.add(label);
+		panel.add(label,BorderLayout.CENTER);
+
 	}
 	
 	void empaquetarImagen(){
@@ -60,6 +61,10 @@ public class Imagenes{
 		internalFrame.add(panel, BorderLayout.CENTER);	
 		internalFrame.pack();
 		internalFrame.setVisible(true);
+		
+//		Dimension internalFrameSize = internalFrame.getSize();
+//		Dimension panelSize = panel.getSize();
+//		panel.setLocation((internalFrameSize.width - panelSize.width)/2,(internalFrameSize.height- panelSize.height)/2);
 		this.api.desktopPane.add(internalFrame);
 		this.api.imagenes.addElement(this);
 	}
