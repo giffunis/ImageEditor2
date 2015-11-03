@@ -15,6 +15,8 @@ import javax.swing.filechooser.FileFilter;
 
 
 
+
+import CustomsMouseListeners.ImagenesOnClick;
 import ImageEditor2.*;
 
 public class Imagenes{
@@ -41,6 +43,8 @@ public class Imagenes{
 		internalFrame = new JInternalFrame("imagen"+(api.imagenes.size() + 1) ,true,true,true,true);
 		internalFrame.setDefaultCloseOperation(JInternalFrame.DISPOSE_ON_CLOSE);
 		internalFrame.setLayout(new BorderLayout());
+		ImagenesOnClick listImage = new ImagenesOnClick();
+        internalFrame.addMouseListener(listImage);
 	}
 	
 	void init_panel(){
@@ -82,6 +86,7 @@ public class Imagenes{
             	JOptionPane.showMessageDialog(new JFrame(), "Se produjo un error al cargar la imagen");
             }    
         }
+        
         this.imagenReal = auxImage;  
         empaquetarImagen();
     }
