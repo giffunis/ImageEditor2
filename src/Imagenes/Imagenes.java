@@ -50,15 +50,15 @@ public class Imagenes{
 	void init_panel(){
 		JLabel label = new JLabel();
 		label.setIcon(new ImageIcon(imagenReal,BorderLayout.CENTER));
-		panel = new JPanel();
-		panel.add(label,BorderLayout.CENTER);
+		panel = new JPanel(new GridBagLayout());
+		panel.add(label);
 
 	}
 	
 	void empaquetarImagen(){
 		init_internalFrame();
 		init_panel();
-		internalFrame.add(panel, BorderLayout.CENTER);	
+		internalFrame.add(panel);	
 		internalFrame.pack();
 		internalFrame.setVisible(true);
 		
