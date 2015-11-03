@@ -1,16 +1,30 @@
 package CustomsMouseListeners;
 
-//import Imagenes.Imagenes;
+import Imagenes.Imagenes;
 
 import java.awt.event.*;
+
 import javax.swing.*;
 
 public class ImagenesOnClick implements MouseListener {
+	
+	Imagenes imagen;
+	
+	public ImagenesOnClick(Imagenes imagen){
+		this.imagen = imagen;
+	}
+	
+	@SuppressWarnings("unused")
+	private int getX(){
+		
+		return 0;
+	}
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
 		// TODO Auto-generated method stub
-		JOptionPane.showMessageDialog(new JFrame(), "has echo click sobre la imagen");
+		int aux = this.imagen.imagenReal.getWidth();
+		JOptionPane.showMessageDialog(new JFrame(), "has echo click sobre la imagen cuya anchura es: " + aux);
 		
 	}
 
