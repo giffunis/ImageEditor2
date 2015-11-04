@@ -24,7 +24,7 @@ public class Imagenes{
 	static final int SIZE = 256;
 	static final String HISTO_ABSO = "Histograma Absoluto";
 	static final String HISTO_ACUM = "Histograma Acumulado";
-	JPanel panel;
+	public JPanel panel;
 	public BufferedImage imagenReal;
 	ImageEditor2 api;
 	public JInternalFrame internalFrame;
@@ -43,8 +43,8 @@ public class Imagenes{
 		internalFrame = new JInternalFrame("imagen"+(api.imagenes.size() + 1) ,true,true,true,true);
 		internalFrame.setDefaultCloseOperation(JInternalFrame.DISPOSE_ON_CLOSE);
 		internalFrame.setLayout(new BorderLayout());
-		ImagenesOnClick listImage = new ImagenesOnClick(this);
-        internalFrame.addMouseListener(listImage);
+//		ImagenesOnClick listImage = new ImagenesOnClick(this);
+//        internalFrame.addMouseListener(listImage);
 	}
 	
 	void init_panel(){
@@ -52,6 +52,9 @@ public class Imagenes{
 		label.setIcon(new ImageIcon(imagenReal,BorderLayout.CENTER));
 		panel = new JPanel(new GridBagLayout());
 		panel.add(label);
+		ImagenesOnClick listImage = new ImagenesOnClick(this);
+		panel.addMouseListener(listImage);
+		
 
 	}
 	
