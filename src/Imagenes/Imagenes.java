@@ -28,6 +28,7 @@ public class Imagenes{
 	public BufferedImage imagenReal;
 	ImageEditor2 api;
 	public JInternalFrame internalFrame;
+	public JLabel label;
 	
 
 	
@@ -48,13 +49,21 @@ public class Imagenes{
 	}
 	
 	void init_panel(){
-		JLabel label = new JLabel();
-		label.setIcon(new ImageIcon(imagenReal,BorderLayout.CENTER));
+		label = new JLabel();
+		label.setLayout(null);
+		label.setHorizontalAlignment(JLabel.CENTER);
+		label.setVerticalAlignment(JLabel.CENTER);
+		label.setIcon(new ImageIcon(imagenReal));
+		
+		
+		ImagenesOnClick listImage = new ImagenesOnClick(this);
+		label.addMouseListener(listImage);
+		
 		panel = new JPanel(new GridBagLayout());
 		panel.add(label);
-		ImagenesOnClick listImage = new ImagenesOnClick(this);
+		/*ImagenesOnClick listImage = new ImagenesOnClick(this);
 		panel.addMouseListener(listImage);
-		
+		*/
 
 	}
 	
