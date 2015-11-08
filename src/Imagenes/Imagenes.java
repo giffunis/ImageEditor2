@@ -50,20 +50,12 @@ public class Imagenes{
 	
 	void init_panel(){
 		label = new JLabel();
-		label.setLayout(null);
-		label.setHorizontalAlignment(JLabel.CENTER);
-		label.setVerticalAlignment(JLabel.CENTER);
-		label.setIcon(new ImageIcon(imagenReal));
-		
-		
-		ImagenesOnClick listImage = new ImagenesOnClick(this);
-		label.addMouseListener(listImage);
-		
+		label.setIcon(new ImageIcon(imagenReal));	
 		panel = new JPanel(new GridBagLayout());
 		panel.add(label);
-		/*ImagenesOnClick listImage = new ImagenesOnClick(this);
+		ImagenesOnClick listImage = new ImagenesOnClick(this);
 		panel.addMouseListener(listImage);
-		*/
+		
 
 	}
 	
