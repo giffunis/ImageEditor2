@@ -69,7 +69,7 @@ public class ImagenesOnClick implements MouseListener {
 	@Override
 	public void mouseEntered(MouseEvent e) {
 		// TODO Auto-generated method stub
-		
+		//JOptionPane.showMessageDialog(new JFrame(), getXY(e));
 	}
 
 	@Override

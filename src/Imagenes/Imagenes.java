@@ -11,6 +11,8 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 
 import org.jfree.chart.ChartPanel;
 
+import BarraInferior.JStatusBar;
+
 import javax.swing.filechooser.FileFilter;
 
 
@@ -29,6 +31,7 @@ public class Imagenes{
 	ImageEditor2 api;
 	public JInternalFrame internalFrame;
 	public JLabel label;
+	JStatusBar statusBar;
 	
 
 	
@@ -38,6 +41,13 @@ public class Imagenes{
 	public Imagenes(ImageEditor2 api, BufferedImage imagen){
 		this.api = api;
 		this.imagenReal = imagen;
+	}
+	
+	void initStatusBar(){
+		int alto = this.imagenReal.getHeight();
+		int ancho = this.imagenReal.getWidth();
+		String imageSize = "Tamaño: " + Integer.toString(alto) + " x " + Integer.toString(ancho);
+		
 	}
 	
 	void init_internalFrame(){

@@ -5,6 +5,7 @@ import java.awt.*;
 import java.util.*;
 import javax.swing.*;
 
+import BarraInferior.JStatusBar;
 //	My class.
 import Imagenes.Imagenes;
 
@@ -16,6 +17,7 @@ public class ImageEditor2 {
 	public Vector<Imagenes> imagenes;
 	//JMenuBar2 menuBar;
 	JToolBar2 toolBar2;
+	
 	
 	ImageEditor2(){
 		imagenes = new Vector<Imagenes>(0);
@@ -48,6 +50,7 @@ public class ImageEditor2 {
 	void initMenuBar2(){
 		
 	}
+	
 	
 	public static void main(String[] args) {
     	@SuppressWarnings("unused")
