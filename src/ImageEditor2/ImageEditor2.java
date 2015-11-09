@@ -17,6 +17,7 @@ public class ImageEditor2 {
 	//JMenuBar2 menuBar;
 	JToolBar2 toolBar2;
 	
+	
 	ImageEditor2(){
 		imagenes = new Vector<Imagenes>(0);
 		initFramePrincipal();
@@ -48,6 +49,7 @@ public class ImageEditor2 {
 	void initMenuBar2(){
 		
 	}
+	
 	
 	public static void main(String[] args) {
     	@SuppressWarnings("unused")
