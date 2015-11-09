@@ -5,7 +5,6 @@ import java.awt.*;
 import java.util.*;
 import javax.swing.*;
 
-import BarraInferior.JStatusBar;
 //	My class.
 import Imagenes.Imagenes;
 

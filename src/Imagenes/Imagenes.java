@@ -23,73 +23,124 @@ import ImageEditor2.*;
 
 public class Imagenes{
 	
+	/*
+	 * Constants
+	 */
 	static final int SIZE = 256;
 	static final String HISTO_ABSO = "Histograma Absoluto";
 	static final String HISTO_ACUM = "Histograma Acumulado";
+	
+	/*
+	 * 
+	 */
 	public JPanel panel;
 	public BufferedImage imagenReal;
-	ImageEditor2 api;
 	public JInternalFrame internalFrame;
 	public JLabel label;
-	JStatusBar statusBar;
+	private JStatusBar statusBar;
+	private ImageEditor2 api;
+	private Vector<Integer> histo;
+	private Vector<Integer> acumulado;
 	
-
-	
+	/*
+	 * Constructor. It needs the main application of ImageEditor2
+	 */
 	public Imagenes(ImageEditor2 api){
 		this.api = api;
 	}
+	
+	/*
+	 * Another Constructor. Uses it when you have to pass a BufferedImage
+	 */
 	public Imagenes(ImageEditor2 api, BufferedImage imagen){
 		this.api = api;
 		this.imagenReal = imagen;
 	}
 	
-	void initStatusBar(){
+// -----------------------------------INIT-------------------------------------------
+	private void initStatusBar(){
 		int alto = this.imagenReal.getHeight();
 		int ancho = this.imagenReal.getWidth();
 		String imageSize = "Tamaño: " + Integer.toString(alto) + " x " + Integer.toString(ancho);
-		
+		// Cálculo del rango de valores:
+		int i = 0, min = 0, max = 0;
+		do{
+			min = i;
+			i++;
+		}while(this.histo.get(i) == 0);
+		i = SIZE -1;
+		do{
+			max = i;
+			i--;
+		}while(this.histo.get(i) == 0);
+		String imageMinMax = "Min: " + min + "; Max: " + max;	
 	}
 	
-	void init_internalFrame(){
+	private void init_internalFrame(){
 		internalFrame = new JInternalFrame("imagen"+(api.imagenes.size() + 1) ,true,true,true,true);
 		internalFrame.setDefaultCloseOperation(JInternalFrame.DISPOSE_ON_CLOSE);
 		internalFrame.setLayout(new BorderLayout());
-//		ImagenesOnClick listImage = new ImagenesOnClick(this);
-//        internalFrame.addMouseListener(listImage);
+
 	}
 	
-	void init_panel(){
+	private void init_panel(){
 		label = new JLabel();
 		label.setIcon(new ImageIcon(imagenReal));	
 		panel = new JPanel(new GridBagLayout());
 		panel.add(label);
 		ImagenesOnClick listImage = new ImagenesOnClick(this);
-		panel.addMouseListener(listImage);
-		
-
+        panel.addMouseListener(listImage);
 	}
 	
-	void empaquetarImagen(){
+	private void initHistogramaAbsoluto(){  
+    	histo = new Vector<Integer>(0);
+    	Color aux;
+    	// Inicializamos el vector o tabla.
+    	for(int i = 0; i < SIZE; i++)
+    		histo.addElement(0);
+    	
+    	for( int i = 0; i < imagenReal.getWidth(); i++ )
+            for( int j = 0; j < imagenReal.getHeight(); j++ ){
+                aux = new Color(this.imagenReal.getRGB(i, j));
+                histo.set(aux.getRed(),histo.get(aux.getRed()) + 1);
+            }
+    }
+	
+	private void initHistogramaAcumulado(){
+		acumulado = new Vector<Integer>(0);
+		acumulado.addElement(this.histo.get(0));
+    	for(int i = 1; i< histo.size(); i++)
+    		acumulado.addElement(acumulado.get(i - 1) + histo.get(i));
+	}
+	
+	/*
+	 * this function build the final Object
+	 */
+	private void empaquetarImagen(){
 		init_internalFrame();
 		init_panel();
+		initHistogramaAbsoluto();
+		initHistogramaAcumulado();
 		internalFrame.add(panel);	
 		internalFrame.pack();
 		internalFrame.setVisible(true);
-		
-//		Dimension internalFrameSize = internalFrame.getSize();
-//		Dimension panelSize = panel.getSize();
-//		panel.setLocation((internalFrameSize.width - panelSize.width)/2,(internalFrameSize.height- panelSize.height)/2);
 		this.api.desktopPane.add(internalFrame);
 		this.api.imagenes.addElement(this);
 	}
 	
-	BufferedImage deepCopy(BufferedImage bi) {
+	// -----------------------------------------------------GETS----------------------------------------
+	public Vector<Integer> getHistoAbsoluto(){return this.histo;}
+	public Vector<Integer> getHistoAcumulativo(){return this.acumulado;}
+	
+	
+	private BufferedImage deepCopy(BufferedImage bi) {
         ColorModel cm = bi.getColorModel();
         boolean isAlphaPremultiplied = cm.isAlphaPremultiplied();
         WritableRaster raster = bi.copyData(null);
         return new BufferedImage(cm, raster, isAlphaPremultiplied, null);
     }
 	
+	//---------------------------------------------POINT OPERATIONS-----------------------------------
 	public void abrirImagen(){	
         BufferedImage auxImage = null;
         JFileChooser selector=new JFileChooser();
@@ -188,21 +239,6 @@ public class Imagenes{
         newImagen.empaquetarImagen();
     }
 	
-	public Vector<Integer> histogramaAbsoluto(){  
-    	Vector<Integer> hist = new Vector<Integer>(0);
-    	Color aux;
-    	// Inicializamos el vector o tabla.
-    	for(int i = 0; i < SIZE; i++)
-    		hist.addElement(0);
-    	
-    	for( int i = 0; i < imagenReal.getWidth(); i++ )
-            for( int j = 0; j < imagenReal.getHeight(); j++ ){
-                aux = new Color(this.imagenReal.getRGB(i, j));
-                hist.set(aux.getRed(),hist.get(aux.getRed()) + 1);
-            }
-    	return hist;
-    }
-	
 	public void createGraphic(String name, Vector<Integer> vectorHist){
 		Histograma histo = new Histograma(name,vectorHist);
 		ChartPanel panel = new ChartPanel(histo.grafica);
@@ -215,18 +251,11 @@ public class Imagenes{
 	}
 	
 	public void graficaHistogramaAbsoluto(int pos){
-		Vector<Integer> vectorHist = histogramaAbsoluto();
-		createGraphic(HISTO_ABSO + ": imagen " + (pos + 1),vectorHist);	
+		createGraphic(HISTO_ABSO + ": imagen " + (pos + 1),this.histo);	
 	}
 	
 	public void graficaHistogramaAcumulado(int pos){
-		Vector<Integer> vectorHist = histogramaAbsoluto();
-		Vector<Integer> vectorAcum = new Vector<Integer>(0);
-    	
-		vectorAcum.addElement(vectorHist.get(0));
-    	for(int i = 1; i< vectorHist.size(); i++)
-    		vectorAcum.addElement(vectorAcum.get(i - 1) + vectorHist.get(i));
-		createGraphic(HISTO_ACUM + ": imagen " + (pos + 1),vectorAcum);	
+		createGraphic(HISTO_ACUM + ": imagen " + (pos + 1),this.acumulado);	
 	}
 	
 }
