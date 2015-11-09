@@ -79,8 +79,12 @@ public class Imagenes{
 			i--;
 		}while(this.histo.get(i) == 0);
 		String imageMinMax = "Min: " + min + "; Max: " + max;	
-		
-		String typeImage = this.nombre.substring(this.nombre.lastIndexOf('.') + 1).trim();
+		String typeImage ="";
+		try{
+			typeImage = this.nombre.substring(this.nombre.lastIndexOf('.') + 1).trim();
+		} catch (Exception e) {
+			typeImage = "null";
+		}
 		
 		// Create the list of secondary components
 		List<JComponent> secondaryComponents = new ArrayList<JComponent>();
