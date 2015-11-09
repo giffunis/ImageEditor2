@@ -1,9 +1,13 @@
 package Imagenes;
 
-import java.awt.*;
+
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.GridBagLayout;
 import java.awt.image.*;
 import java.io.File;
-import java.util.Vector;
+import java.util.*;
+
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -37,10 +41,11 @@ public class Imagenes{
 	public BufferedImage imagenReal;
 	public JInternalFrame internalFrame;
 	public JLabel label;
-	private JStatusBar statusBar;
+	public JStatusBar statusBar;
 	private ImageEditor2 api;
 	private Vector<Integer> histo;
 	private Vector<Integer> acumulado;
+	private String nombre;
 	
 	/*
 	 * Constructor. It needs the main application of ImageEditor2
@@ -61,7 +66,7 @@ public class Imagenes{
 	private void initStatusBar(){
 		int alto = this.imagenReal.getHeight();
 		int ancho = this.imagenReal.getWidth();
-		String imageSize = "Tamaño: " + Integer.toString(alto) + " x " + Integer.toString(ancho);
+		String imageSize = "Tamaño: " + Integer.toString(ancho) + " x " + Integer.toString(alto);
 		// Cálculo del rango de valores:
 		int i = 0, min = 0, max = 0;
 		do{
@@ -74,6 +79,16 @@ public class Imagenes{
 			i--;
 		}while(this.histo.get(i) == 0);
 		String imageMinMax = "Min: " + min + "; Max: " + max;	
+		
+		String typeImage = this.nombre.substring(this.nombre.lastIndexOf('.') + 1).trim();
+		
+		// Create the list of secondary components
+		List<JComponent> secondaryComponents = new ArrayList<JComponent>();
+		secondaryComponents.add( new JLabel("Type: " + typeImage));
+		secondaryComponents.add( new JLabel(imageMinMax) );
+		secondaryComponents.add( new JLabel("Pos: null"));
+		
+		statusBar = new JStatusBar(new JLabel(imageSize),secondaryComponents);
 	}
 	
 	private void init_internalFrame(){
@@ -121,7 +136,9 @@ public class Imagenes{
 		init_panel();
 		initHistogramaAbsoluto();
 		initHistogramaAcumulado();
-		internalFrame.add(panel);	
+		initStatusBar();
+		internalFrame.add(panel);
+		internalFrame.add(statusBar,BorderLayout.SOUTH);
 		internalFrame.pack();
 		internalFrame.setVisible(true);
 		this.api.desktopPane.add(internalFrame);
@@ -152,6 +169,7 @@ public class Imagenes{
             try {
                 File imagenSeleccionada=selector.getSelectedFile();
                 auxImage = ImageIO.read(imagenSeleccionada);
+                this.nombre = imagenSeleccionada.getName();
             } catch (Exception e) {
             	JOptionPane.showMessageDialog(new JFrame(), "Se produjo un error al cargar la imagen");
             }    
