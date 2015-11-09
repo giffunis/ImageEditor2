@@ -2,10 +2,8 @@ package CustomsMouseListeners;
 
 import Imagenes.Imagenes;
 
-import java.awt.Point;
+import java.awt.Color;
 import java.awt.event.*;
-
-import javax.swing.*;
 
 public class ImagenesOnClick implements MouseListener {
 	
@@ -15,7 +13,7 @@ public class ImagenesOnClick implements MouseListener {
 		this.imagen = imagen;
 	}
 	
-	private Integer getX(MouseEvent e){
+	private Integer get_X(MouseEvent e){
         int bufferImageWidth = this.imagen.imagenReal.getWidth();
         int internalFrameWidth =this.imagen.panel.getWidth();
         int posCursor = e.getX();
@@ -30,7 +28,7 @@ public class ImagenesOnClick implements MouseListener {
         return salida;
 	}
 
-	private Integer getY(MouseEvent e){
+	private Integer get_Y(MouseEvent e){
         int bufferImageWidth = this.imagen.imagenReal.getHeight();
         int internalFrameWidth =this.imagen.panel.getHeight();
         int posCursor = e.getY();
@@ -45,13 +43,16 @@ public class ImagenesOnClick implements MouseListener {
         return salida;
 	}
 	
-	private Point getXY(MouseEvent e){
-		return new Point(getX(e),getY(e));
-	}
-	
 	@Override
 	public void mouseClicked(MouseEvent e) {
-		JOptionPane.showMessageDialog(new JFrame(), getXY(e));
+		imagen.statusBar.setPositionMouse(get_X(e), get_Y(e));
+		try{
+			Color pixel = new Color(imagen.imagenReal.getRGB(get_X(e), get_Y(e)));
+			imagen.statusBar.setGrayMouse(pixel);
+		}catch(Exception a){
+			System.out.println("Fuera de rango");
+		}
+
 	}
 
 	@Override
@@ -69,8 +70,6 @@ public class ImagenesOnClick implements MouseListener {
 	@Override
 	public void mouseEntered(MouseEvent e) {
 		// TODO Auto-generated method stub
-		imagen.posXY = new JLabel("(" + getXY(e).x + "," + getXY(e).y + ")");
-		
 	}
 
 	@Override
@@ -78,5 +77,9 @@ public class ImagenesOnClick implements MouseListener {
 		// TODO Auto-generated method stub
 		
 	}
+
+	public void mouseMoved(MouseEvent e) {
+//		imagen.statusBar.setPositionMouse(e.getX(), e.getY());
+   }
 
 }
