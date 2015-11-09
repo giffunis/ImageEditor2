@@ -14,8 +14,7 @@ import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import org.jfree.chart.ChartPanel;
-
-import BarraInferior.JStatusBar;
+import BarraInferior.JStatusBar2;
 
 import javax.swing.filechooser.FileFilter;
 
@@ -27,25 +26,20 @@ import ImageEditor2.*;
 
 public class Imagenes{
 	
-	/*
-	 * Constants
-	 */
 	static final int SIZE = 256;
 	static final String HISTO_ABSO = "Histograma Absoluto";
 	static final String HISTO_ACUM = "Histograma Acumulado";
-	
-	/*
-	 * 
-	 */
+
 	public JPanel panel;
 	public BufferedImage imagenReal;
 	public JInternalFrame internalFrame;
 	public JLabel label;
-	public JStatusBar statusBar;
+	public JStatusBar2 statusBar;
 	private ImageEditor2 api;
 	private Vector<Integer> histo;
 	private Vector<Integer> acumulado;
 	private String nombre;
+	public JLabel posXY;
 	
 	/*
 	 * Constructor. It needs the main application of ImageEditor2
@@ -63,37 +57,53 @@ public class Imagenes{
 	}
 	
 // -----------------------------------INIT-------------------------------------------
-	private void initStatusBar(){
-		int alto = this.imagenReal.getHeight();
-		int ancho = this.imagenReal.getWidth();
-		String imageSize = "Tamaño: " + Integer.toString(ancho) + " x " + Integer.toString(alto);
-		// Cálculo del rango de valores:
-		int i = 0, min = 0, max = 0;
+	private int minColor(){
+		int i = 0, min = 0;
 		do{
 			min = i;
 			i++;
 		}while(this.histo.get(i) == 0);
-		i = SIZE -1;
+		return min;
+	}
+	
+	private int maxColor(){
+		int i = SIZE -1, max = 0;
 		do{
 			max = i;
 			i--;
 		}while(this.histo.get(i) == 0);
-		String imageMinMax = "Min: " + min + "; Max: " + max;	
+		return max;
+	}
+	
+	public String getMinMax(){
+		int min = minColor(); 
+		int max = maxColor();
+		String imageMinMax = "[" + min + "," + max + "]";	
+		return imageMinMax;
+	}
+	
+	public String getImageType(){
 		String typeImage ="";
 		try{
 			typeImage = this.nombre.substring(this.nombre.lastIndexOf('.') + 1).trim();
 		} catch (Exception e) {
-			typeImage = "null";
+			typeImage = "no definied";
 		}
-		
-		// Create the list of secondary components
-		List<JComponent> secondaryComponents = new ArrayList<JComponent>();
-		secondaryComponents.add( new JLabel("Type: " + typeImage));
-		secondaryComponents.add( new JLabel(imageMinMax) );
-		secondaryComponents.add( new JLabel("Pos: null"));
-		
-		statusBar = new JStatusBar(new JLabel(imageSize),secondaryComponents);
+		return typeImage;
 	}
+	
+	public String getImageSize(){
+		int alto = this.imagenReal.getHeight();
+		int ancho = this.imagenReal.getWidth();
+		String imageSize = Integer.toString(ancho) + " x " + Integer.toString(alto);
+		return imageSize;
+	}
+	
+	private void initStatusBar(){
+		statusBar = new JStatusBar2(this);
+		statusBar.setVisible(true);
+	}
+	
 	
 	private void init_internalFrame(){
 		internalFrame = new JInternalFrame("imagen"+(api.imagenes.size() + 1) ,true,true,true,true);
@@ -114,7 +124,7 @@ public class Imagenes{
 	private void initHistogramaAbsoluto(){  
     	histo = new Vector<Integer>(0);
     	Color aux;
-    	// Inicializamos el vector o tabla.
+
     	for(int i = 0; i < SIZE; i++)
     		histo.addElement(0);
     	
@@ -149,11 +159,9 @@ public class Imagenes{
 		this.api.imagenes.addElement(this);
 	}
 	
-	// -----------------------------------------------------GETS----------------------------------------
-	public Vector<Integer> getHistoAbsoluto(){return this.histo;}
-	public Vector<Integer> getHistoAcumulativo(){return this.acumulado;}
-	
-	
+	/*
+	 * Private method to make a copy of an image.
+	 */
 	private BufferedImage deepCopy(BufferedImage bi) {
         ColorModel cm = bi.getColorModel();
         boolean isAlphaPremultiplied = cm.isAlphaPremultiplied();
@@ -161,7 +169,22 @@ public class Imagenes{
         return new BufferedImage(cm, raster, isAlphaPremultiplied, null);
     }
 	
+	// -----------------------------------------------------GETS----------------------------------------
+	/*
+	 * Method that return in a vector, the histogram of an image.
+	 */
+	public Vector<Integer> getHistoAbsoluto(){return this.histo;}
+	
+	/*
+	 * Method that return in a vector, the accumulated histogram of an image.
+	 */
+	public Vector<Integer> getHistoAcumulativo(){return this.acumulado;}
+	
 	//---------------------------------------------POINT OPERATIONS-----------------------------------
+	
+	/*
+	 * Method to open an image
+	 */
 	public void abrirImagen(){	
         BufferedImage auxImage = null;
         JFileChooser selector=new JFileChooser();
@@ -183,6 +206,9 @@ public class Imagenes{
         empaquetarImagen();
     }
 	
+	/*
+	 * Method to save an image
+	 */
 	public void guardarImagen(){
         JFileChooser selector=new JFileChooser();
         selector.setDialogTitle("Guardar como..."); 
@@ -261,7 +287,10 @@ public class Imagenes{
         newImagen.empaquetarImagen();
     }
 	
-	public void createGraphic(String name, Vector<Integer> vectorHist){
+	/*
+	 * Private method to draw a graphic
+	 */
+	private void createGraphic(String name, Vector<Integer> vectorHist){
 		Histograma histo = new Histograma(name,vectorHist);
 		ChartPanel panel = new ChartPanel(histo.grafica);
 		JInternalFrame ventana = new JInternalFrame(name,true,true,true,true);
@@ -272,10 +301,16 @@ public class Imagenes{
 		this.api.desktopPane.add(ventana);
 	}
 	
+	/*
+	 * Public method to create the histogram graphic of an image
+	 */
 	public void graficaHistogramaAbsoluto(int pos){
 		createGraphic(HISTO_ABSO + ": imagen " + (pos + 1),this.histo);	
 	}
 	
+	/*
+	 * Public method to create the accumulated histogram graphic of an image
+	 */
 	public void graficaHistogramaAcumulado(int pos){
 		createGraphic(HISTO_ACUM + ": imagen " + (pos + 1),this.acumulado);	
 	}

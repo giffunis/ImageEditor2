@@ -35,7 +35,7 @@ public class ImagenesOnClick implements MouseListener {
         int internalFrameWidth =this.imagen.panel.getHeight();
         int posCursor = e.getY();
 
-        int distancia = (int) Math.abs(internalFrameWidth - bufferImageWidth + 7)/2;
+        int distancia = (int) Math.abs(internalFrameWidth - bufferImageWidth + 6)/2;
         int salida = posCursor + distancia;
 
         if(bufferImageWidth < internalFrameWidth)
@@ -69,7 +69,7 @@ public class ImagenesOnClick implements MouseListener {
 	@Override
 	public void mouseEntered(MouseEvent e) {
 		// TODO Auto-generated method stub
-		
+		imagen.posXY = new JLabel("(" + getXY(e).x + "," + getXY(e).y + ")");
 		
 	}
 
