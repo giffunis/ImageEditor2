@@ -40,6 +40,7 @@ public class Imagenes{
 	private Vector<Integer> acumulado;
 	private String nombre;
 	public JLabel posXY;
+	private int brillo;
 	
 	/*
 	 * Constructor. It needs the main application of ImageEditor2
@@ -150,6 +151,7 @@ public class Imagenes{
 		init_panel();
 		initHistogramaAbsoluto();
 		initHistogramaAcumulado();
+		calculateBrillo();
 		initStatusBar();
 		internalFrame.add(panel);
 		internalFrame.add(statusBar,BorderLayout.SOUTH);
@@ -313,6 +315,19 @@ public class Imagenes{
 	 */
 	public void graficaHistogramaAcumulado(int pos){
 		createGraphic(HISTO_ACUM + ": imagen " + (pos + 1),this.acumulado);	
+	}
+	
+	private void calculateBrillo(){
+		float sumatorio = 0;
+		int tamano = this.imagenReal.getHeight() * this.imagenReal.getWidth();
+		for(int i = 0; i < SIZE; i++){
+			sumatorio = this.histo.get(i) * i + sumatorio;
+		}
+		this.brillo = (int) (sumatorio / tamano);
+	}
+	
+	public String getBrillo(){
+		return String.valueOf(this.brillo);
 	}
 	
 }
