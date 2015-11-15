@@ -1,6 +1,7 @@
 package ImageEditor2;
 
 import java.awt.GridLayout;
+import java.awt.Point;
 import java.net.URL;
 
 import javax.swing.*;
@@ -142,12 +143,80 @@ public class JToolBar2 extends JToolBar{
 			add(btnItem);
 		}
 		
-		private void ventana2Tramos(int n){
-			System.out.println(Integer.toString(n));
+		private Point sTringToPoint(String cadena){
+			String y = cadena.substring(cadena.lastIndexOf(',') + 1).trim();
+			String x = cadena.substring(0, cadena.length() - (1 + y.length()));
+			return new Point(Integer.parseInt(x),Integer.parseInt(y));
+		}
+		
+		private void ventana2Tramos(int nTramos){
+//			System.out.println(Integer.toString(n));
+			JInternalFrame marco = new JInternalFrame("Transformación lineal");
+			marco.setLayout(new GridLayout(2,2));
+			JPanel panelIzq = new JPanel(new GridLayout(nTramos + 1,3));
+			JPanel panelDer = new JPanel();
+			JButton btnDib = new JButton("Dibujar");
+			JButton btnAccept = new JButton("Aceptar");
+			final JTextField [] fields = new JTextField[nTramos * 2];
+			final Point [] puntos = new Point[nTramos * 2];
+			final int [] aux = new int[1];
+			aux[0] = nTramos * 2;
+			
+			
+			
+			panelIzq.add(new JLabel("Tramo"));
+			panelIzq.add(new JLabel("Punto 1"));
+			panelIzq.add(new JLabel("Punto 2"));
+			
+			for(int i = 0; i < nTramos; i++){
+				panelIzq.add(new JLabel(Integer.toString(i + 1)));
+				fields[i * 2] = new JTextField();
+				panelIzq.add(fields[i * 2]);
+				fields[i * 2 + 1] = new JTextField();
+				panelIzq.add(fields[i * 2 + 1]);	
+			}
+			
+			
+			btnDib.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					try{
+						for(int i = 0; i < aux[0]; i++){
+							puntos[i] = sTringToPoint(fields[i].getText());
+							System.out.println(puntos[i]);
+							//Aquí llamaría a la función dibujar
+						}
+						
+					} catch(Exception a){
+						//System.out.println("No ha introducido ningún valor");
+					}
+				}
+			});
+			
+			btnAccept.addActionListener(new ActionListener() {	
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					try {
+						marco.setClosed( true );
+					} catch (PropertyVetoException e1) {
+						e1.printStackTrace();
+					}
+				}
+			});
+			
+			panelIzq.setVisible(true);
+			panelDer.setVisible(true);
+			marco.add(panelIzq);
+			marco.add(panelDer);
+			marco.add(btnDib);
+			marco.add(btnAccept);
+			marco.pack();
+			marco.setVisible(true);
+			api.desktopPane.add(marco);
 		}
 		
 		private void NTramos(){
-			JInternalFrame marco = new JInternalFrame();
+			JInternalFrame marco = new JInternalFrame("Transformación lineal");
 			JPanel panel = new JPanel();
 			JLabel label = new JLabel("Números de tramos: ");
 			JTextField tramos = new JTextField(2);
@@ -163,7 +232,7 @@ public class JToolBar2 extends JToolBar{
 						ventana2Tramos(nTramos);
 						marco.setClosed( true );
 					} catch(Exception a){
-						System.out.println("No ha introducido ningún valor");
+						//System.out.println("No ha introducido ningún valor");
 					}
 				}
 			});
