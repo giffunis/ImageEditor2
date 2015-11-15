@@ -1,5 +1,6 @@
 package ImageEditor2;
 
+
 import java.awt.GridLayout;
 import java.awt.Point;
 import java.net.URL;
@@ -151,8 +152,9 @@ public class JToolBar2 extends JToolBar{
 		
 		private void ventana2Tramos(int nTramos){
 //			System.out.println(Integer.toString(n));
-			JInternalFrame marco = new JInternalFrame("Transformación lineal");
+			JInternalFrame marco = new JInternalFrame("Transformación lineal",true,true,true,true);
 			marco.setLayout(new GridLayout(2,2));
+			marco.setDefaultCloseOperation(JInternalFrame.DISPOSE_ON_CLOSE);
 			JPanel panelIzq = new JPanel(new GridLayout(nTramos + 1,3));
 			JPanel panelDer = new JPanel();
 			JButton btnDib = new JButton("Dibujar");
