@@ -7,6 +7,10 @@ import javax.swing.*;
 
 import Imagenes.Imagenes;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.beans.PropertyVetoException;
+
 @SuppressWarnings("serial")
 public class JToolBar2 extends JToolBar{
 		
@@ -138,6 +142,10 @@ public class JToolBar2 extends JToolBar{
 			add(btnItem);
 		}
 		
+		private void ventana2Tramos(int n){
+			System.out.println(Integer.toString(n));
+		}
+		
 		private void NTramos(){
 			JInternalFrame marco = new JInternalFrame();
 			JPanel panel = new JPanel();
@@ -145,6 +153,32 @@ public class JToolBar2 extends JToolBar{
 			JTextField tramos = new JTextField(2);
 			JButton btnAccept = new JButton("Aceptar");
 			JButton btnCancel = new JButton("Cancelar");
+			//final int [] nTramos = new int [1];
+			
+			btnAccept.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					try{
+						int nTramos = Integer.parseInt(tramos.getText());
+						ventana2Tramos(nTramos);
+						marco.setClosed( true );
+					} catch(Exception a){
+						System.out.println("No ha introducido ningún valor");
+					}
+				}
+			});
+			
+			btnCancel.addActionListener(new ActionListener() {	
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					try {
+						marco.setClosed( true );
+					} catch (PropertyVetoException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+				}
+			});
 			
 			panel.setLayout( new GridLayout(2,2));
 			panel.add(label);
@@ -157,6 +191,7 @@ public class JToolBar2 extends JToolBar{
 			marco.setVisible(true);
 			api.desktopPane.add(marco);
 		}
+		
 		
 		private void btnAjusteLinealActionPerformed(java.awt.event.ActionEvent evt) {
 			NTramos();
