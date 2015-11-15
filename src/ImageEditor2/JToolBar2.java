@@ -1,5 +1,6 @@
 package ImageEditor2;
 
+import java.awt.GridLayout;
 import java.net.URL;
 
 import javax.swing.*;
@@ -19,6 +20,7 @@ public class JToolBar2 extends JToolBar{
 			initEscalaGrises();
 			initHistogramaAbsoluto();
 			initHistogramaAcumulado();
+			initAjusteLineal();
 		}
 		
 		// function to create a Button
@@ -123,6 +125,41 @@ public class JToolBar2 extends JToolBar{
 		private void btnHistogramaAcumuladoActionPerformed(java.awt.event.ActionEvent evt) {
 			int pos = getImageFromInternalFrame();
 			api.imagenes.get(pos).graficaHistogramaAcumulado(pos);
+		}
+		
+//----------------------------------------AJUSTE LINEAL POR TRAMOS------------------------------------------
+		void initAjusteLineal(){
+			createBtn("Ajuste lineal por tramos",Thread.currentThread().getContextClassLoader().getResource("Images/save.png"));
+			btnItem.addActionListener(new java.awt.event.ActionListener() {
+	            public void actionPerformed(java.awt.event.ActionEvent evt) {
+	                btnAjusteLinealActionPerformed(evt);
+	            }
+	        });
+			add(btnItem);
+		}
+		
+		private void NTramos(){
+			JInternalFrame marco = new JInternalFrame();
+			JPanel panel = new JPanel();
+			JLabel label = new JLabel("Números de tramos: ");
+			JTextField tramos = new JTextField(2);
+			JButton btnAccept = new JButton("Aceptar");
+			JButton btnCancel = new JButton("Cancelar");
+			
+			panel.setLayout( new GridLayout(2,2));
+			panel.add(label);
+			panel.add(tramos);
+			panel.add(btnAccept);
+			panel.add(btnCancel);
+			panel.setVisible(true);
+			marco.add(panel);
+			marco.pack();
+			marco.setVisible(true);
+			api.desktopPane.add(marco);
+		}
+		
+		private void btnAjusteLinealActionPerformed(java.awt.event.ActionEvent evt) {
+			NTramos();
 		}
 		
 }
