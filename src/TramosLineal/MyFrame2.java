@@ -7,6 +7,7 @@ import java.awt.event.ActionListener;
 import java.util.Vector;
 
 import javax.swing.JButton;
+import javax.swing.JFrame;
 import javax.swing.JInternalFrame;
 import javax.swing.JPanel;
 
@@ -14,7 +15,7 @@ import ImageEditor2.ImageEditor2;
 
 
 @SuppressWarnings("serial")
-public class MyJInternalFrame extends JInternalFrame{
+public class MyFrame2 extends JFrame{
 
 	JPanel panelBotton;
 	MyLeftPanel panelIzq;
@@ -23,9 +24,9 @@ public class MyJInternalFrame extends JInternalFrame{
 	int nTramos;
 	ImageEditor2 api;
 	
-	public MyJInternalFrame(ImageEditor2 api, int nTramos) {
-		super("Transformación Lineal",true,true,true,true);
-		setDefaultCloseOperation(JInternalFrame.DISPOSE_ON_CLOSE);
+	public MyFrame2(ImageEditor2 api, int nTramos) {
+		super("Transformación Lineal");
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setVisible(true);
 		//setLayout( new GridLayout(2,2));
 		this.nTramos = nTramos;
@@ -64,7 +65,7 @@ public class MyJInternalFrame extends JInternalFrame{
 			public void actionPerformed(ActionEvent e) {
 				try{
 					transform(panelIzq.getPoints());
-					setClosed( true ); // Falta llamar a la funcion 
+					dispose(); //Destroy the JFrame object; // Falta llamar a la funcion 
 				} catch(Exception a){
 					a.printStackTrace();
 				}
@@ -78,7 +79,7 @@ public class MyJInternalFrame extends JInternalFrame{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				try{
-					setClosed( true );
+					dispose(); //Destroy the JFrame object;
 				} catch(Exception a){
 					a.printStackTrace();
 				}
