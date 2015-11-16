@@ -341,14 +341,15 @@ public class Imagenes{
 		for(int i = 0; i < nTramos; i++){
 			vTramos.addElement(new CalcRecta(points.get(i*2), points.get(i*2+1)));
 			
-			for(int j = points.get(i*2).x; j < points.get(i*2+1).x; j++){
+			for(int j = points.get(i*2).x; j <= points.get(i*2+1).x; j++){
 				tabla.addElement(vTramos.get(i).calcVout(j));
+				//System.out.println("j = " + j);
 			}
 		}
 		System.out.println("ha hallado la ecuación de las rectas de N Tramos: " + vTramos.size());
 		System.out.println("Vin + Vout");
 		
-		for(int i = 0; i < 256;i++){
+		for(int i = 0; i < tabla.size();i++){
 			System.out.println(i+" , "+tabla.get(i));
 		}
 		
