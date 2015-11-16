@@ -46,7 +46,7 @@ public class MyJInternalFrame extends JInternalFrame{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				try{
-					panelIzq.getPoints();
+					panelDer.draw(panelIzq.getPoints());
 				} catch(Exception a){
 					a.printStackTrace();
 				}
