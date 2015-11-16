@@ -6,6 +6,7 @@ import java.util.Vector;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.SwingConstants;
 
 @SuppressWarnings("serial")
 public class MyLeftPanel extends JPanel{
@@ -16,8 +17,10 @@ public class MyLeftPanel extends JPanel{
 	
 	MyLeftPanel(int nTramos){
 		super(new GridLayout(nTramos + 1,3));
-		setVisible(true);
+		this.setVisible(true);
+		this.setSize(200, 400);
 		this.nTramos = nTramos;
+		//this.setAlignmentX(SwingConstants.LEFT);
 		initPrivateComponents();
 	}
 

@@ -25,7 +25,7 @@ public class MyJInternalFrame extends JInternalFrame{
 		super("Transformación Lineal",true,true,true,true);
 		setDefaultCloseOperation(JInternalFrame.DISPOSE_ON_CLOSE);
 		setVisible(true);
-		setSize(600,600);
+		//setLayout( new GridLayout(2,2));
 		this.nTramos = nTramos;
 		System.out.println("Número de tramos de MyJInternalFrame: " + nTramos);
 		initComponentes();
@@ -36,6 +36,7 @@ public class MyJInternalFrame extends JInternalFrame{
 		initPanelIzq();
 		initPanelDer();
 		initPanelBotton();
+		pack();
 	}
 
 	private void initPanelBotton() {
@@ -86,7 +87,7 @@ public class MyJInternalFrame extends JInternalFrame{
 
 	private void initPanelDer() {
 		panelDer = new MyDrawPanel();
-		add(panelDer);
+		add(panelDer,BorderLayout.EAST);
 	}
 
 	private void initPanelIzq() {
