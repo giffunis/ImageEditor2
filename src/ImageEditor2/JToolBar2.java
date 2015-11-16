@@ -7,11 +7,11 @@ import java.net.URL;
 import javax.swing.*;
 
 import Imagenes.Imagenes;
-import TramosLineal.MyJInternalFrame;
+import TramosLineal.MyFrame2;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.beans.PropertyVetoException;
+
 
 @SuppressWarnings("serial")
 public class JToolBar2 extends JToolBar{
@@ -147,11 +147,11 @@ public class JToolBar2 extends JToolBar{
 		private void ventana2Tramos(int nTramos){
 			System.out.println("Número de tramos que le pasamos a MyJInternalFrame: " + nTramos);
 			@SuppressWarnings("unused")
-			MyJInternalFrame ventana = new MyJInternalFrame(this.api, nTramos);
+			MyFrame2 ventana = new MyFrame2(this.api, nTramos);
 		}
 		
 		private void NTramos(){
-			JInternalFrame marco = new JInternalFrame("Transformación lineal");
+			JFrame marco = new JFrame("Transformación lineal");
 			JPanel panel = new JPanel();
 			JLabel label = new JLabel("Números de tramos: ");
 			JTextField tramos = new JTextField(2);
@@ -168,15 +168,15 @@ public class JToolBar2 extends JToolBar{
 			marco.add(panel);
 			marco.pack();
 			marco.setVisible(true);
-			api.desktopPane.add(marco);
 			
 			btnAccept.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					try{
+						marco.dispose();
 						int nTramos = Integer.parseInt(tramos.getText());
 						ventana2Tramos(nTramos);
-						marco.setClosed( true );
+						
 					} catch(Exception a){
 						//System.out.println("No ha introducido ningún valor");
 					}
@@ -187,8 +187,8 @@ public class JToolBar2 extends JToolBar{
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					try {
-						marco.setClosed( true );
-					} catch (PropertyVetoException e1) {
+						marco.dispose();
+					} catch (Exception e1) {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
 					}

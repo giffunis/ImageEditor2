@@ -333,7 +333,44 @@ public class Imagenes{
 	
 	
 	public void LinealTransform(Vector<Point> points){
+		int nTramos = points.size()/2;
+		BufferedImage outImage = deepCopy(this.imagenReal);
+		Vector<CalcRecta> vTramos = new Vector<CalcRecta>(0);
+		Vector<Integer> tabla = new Vector<Integer>(0);
 		
+		for(int i = 0; i < nTramos; i++){
+			vTramos.addElement(new CalcRecta(points.get(i*2), points.get(i*2+1)));
+			
+			for(int j = points.get(i*2).x; j <= points.get(i*2+1).x; j++){
+				tabla.addElement(vTramos.get(i).calcVout(j));
+				//System.out.println("j = " + j);
+			}
+		}
+//		Comprobación de los datos calculados
+		System.out.println("ha hallado la ecuación de las rectas de N Tramos: " + vTramos.size());
+		System.out.println("Vin + Vout");
+		for(int i = 0; i < tabla.size();i++){
+			System.out.println(i+" , "+tabla.get(i));
+		}
+//		Fin de la comprobación
+		
+		
+		
+		for( int i = 0; i < outImage.getWidth(); i++ ){
+			int valor;
+			Color colorAux;
+            for( int j = 0; j < outImage.getHeight(); j++ ){
+                //Almacenamos el color del píxel
+                colorAux=new Color(outImage.getRGB(i, j));
+                //Calculamos la media de los tres canales (rojo, verde, azul)
+                valor = tabla.get(colorAux.getRed());
+                colorAux = new Color(valor,valor,valor);
+                //Asignamos el nuevo valor al BufferedImage
+                outImage.setRGB(i, j,colorAux.getRGB());
+            }
+        }
+		Imagenes newImagen = new Imagenes(this.api,outImage);
+		newImagen.empaquetarImagen();
 	}
 	
 	
