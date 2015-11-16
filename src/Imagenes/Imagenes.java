@@ -4,6 +4,7 @@ package Imagenes;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.GridBagLayout;
+import java.awt.Point;
 import java.awt.image.*;
 import java.io.File;
 import java.util.*;
@@ -329,5 +330,11 @@ public class Imagenes{
 	public String getBrillo(){
 		return String.valueOf(this.brillo);
 	}
+	
+	
+	public void LinealTransform(Vector<Point> points){
+		
+	}
+	
 	
 }

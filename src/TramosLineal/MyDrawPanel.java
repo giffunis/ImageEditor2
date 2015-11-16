@@ -9,7 +9,7 @@ import java.util.Vector;
 
 import javax.swing.BorderFactory;
 import javax.swing.JPanel;
-import javax.swing.SwingConstants;
+
 
 @SuppressWarnings("serial")
 public class MyDrawPanel extends JPanel {

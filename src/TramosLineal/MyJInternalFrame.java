@@ -1,9 +1,10 @@
 package TramosLineal;
 
 import java.awt.BorderLayout;
-import java.awt.GridLayout;
+import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Vector;
 
 import javax.swing.JButton;
 import javax.swing.JInternalFrame;
@@ -20,6 +21,7 @@ public class MyJInternalFrame extends JInternalFrame{
 	MyDrawPanel panelDer;
 	JButton btn;
 	int nTramos;
+	ImageEditor2 api;
 	
 	public MyJInternalFrame(ImageEditor2 api, int nTramos) {
 		super("Transformación Lineal",true,true,true,true);
@@ -29,7 +31,8 @@ public class MyJInternalFrame extends JInternalFrame{
 		this.nTramos = nTramos;
 		System.out.println("Número de tramos de MyJInternalFrame: " + nTramos);
 		initComponentes();
-		api.desktopPane.add(this);
+		this.api = api;
+		this.api.desktopPane.add(this);
 	}
 
 	private void initComponentes() {
@@ -60,11 +63,13 @@ public class MyJInternalFrame extends JInternalFrame{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				try{
+					transform(panelIzq.getPoints());
 					setClosed( true ); // Falta llamar a la funcion 
 				} catch(Exception a){
 					a.printStackTrace();
 				}
 			}
+
 		});
 		panelBotton.add(btn);
 		
@@ -93,6 +98,21 @@ public class MyJInternalFrame extends JInternalFrame{
 	private void initPanelIzq() {
 		panelIzq = new MyLeftPanel(nTramos);
 		add(panelIzq,BorderLayout.WEST);
+	}
+	
+	private int getImageFromInternalFrame(){
+		JInternalFrame internalFrame = api.desktopPane.getSelectedFrame();
+		String aux = internalFrame.getTitle();
+		for(int i = 0; i < api.imagenes.size(); i++){
+			if(aux == api.imagenes.get(i).internalFrame.getTitle()){
+				return i;
+			}
+		}
+		return -1;
+	}
+	
+	private void transform(Vector<Point> points) {
+		api.imagenes.get(getImageFromInternalFrame()).LinealTransform(points);	
 	}
 
 }

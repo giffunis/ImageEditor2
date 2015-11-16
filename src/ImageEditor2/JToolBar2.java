@@ -2,7 +2,6 @@ package ImageEditor2;
 
 
 import java.awt.GridLayout;
-import java.awt.Point;
 import java.net.URL;
 
 import javax.swing.*;
@@ -147,6 +146,7 @@ public class JToolBar2 extends JToolBar{
 		
 		private void ventana2Tramos(int nTramos){
 			System.out.println("Número de tramos que le pasamos a MyJInternalFrame: " + nTramos);
+			@SuppressWarnings("unused")
 			MyJInternalFrame ventana = new MyJInternalFrame(this.api, nTramos);
 		}
 		
