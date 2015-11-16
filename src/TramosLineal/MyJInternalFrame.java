@@ -1,6 +1,7 @@
 package TramosLineal;
 
 import java.awt.BorderLayout;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -16,7 +17,7 @@ public class MyJInternalFrame extends JInternalFrame{
 
 	JPanel panelBotton;
 	MyLeftPanel panelIzq;
-	//MyDrawPanel panelDer;
+	MyDrawPanel panelDer;
 	JButton btn;
 	int nTramos;
 	
@@ -24,6 +25,7 @@ public class MyJInternalFrame extends JInternalFrame{
 		super("Transformación Lineal",true,true,true,true);
 		setDefaultCloseOperation(JInternalFrame.DISPOSE_ON_CLOSE);
 		setVisible(true);
+		setSize(600,600);
 		this.nTramos = nTramos;
 		System.out.println("Número de tramos de MyJInternalFrame: " + nTramos);
 		initComponentes();
@@ -32,9 +34,8 @@ public class MyJInternalFrame extends JInternalFrame{
 
 	private void initComponentes() {
 		initPanelIzq();
-		//initPanelDer();
+		initPanelDer();
 		initPanelBotton();
-		pack();
 	}
 
 	private void initPanelBotton() {
@@ -83,10 +84,10 @@ public class MyJInternalFrame extends JInternalFrame{
 			
 	}
 
-//	private void initPanelDer() {
-//		panelDer = new MyDrawPanel();
-//		add(panelIzq,JPanel.RIGHT_ALIGNMENT);
-//	}
+	private void initPanelDer() {
+		panelDer = new MyDrawPanel();
+		add(panelDer);
+	}
 
 	private void initPanelIzq() {
 		panelIzq = new MyLeftPanel(nTramos);
