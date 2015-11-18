@@ -341,10 +341,17 @@ public class Imagenes{
 		for(int i = 0; i < nTramos; i++){
 			vTramos.addElement(new CalcRecta(points.get(i*2), points.get(i*2+1)));
 			
-			for(int j = points.get(i*2).x; j <= points.get(i*2+1).x; j++){
-				tabla.addElement(vTramos.get(i).calcVout(j));
-				//System.out.println("j = " + j);
+			if(points.get(i*2).x == 0){
+				for(int j = points.get(i*2).x; j < points.get(i*2+1).x; j++)
+					tabla.addElement(vTramos.get(i).calcVout(j));
+			}else{
+				for(int j = points.get(i*2).x; j <= points.get(i*2+1).x; j++)
+					tabla.addElement(vTramos.get(i).calcVout(j));
+					//System.out.println("j = " + j);
 			}
+//			for(int j = points.get(i*2).x; j <= points.get(i*2+1).x; j++)
+//				tabla.addElement(vTramos.get(i).calcVout(j));
+//				//System.out.println("j = " + j);
 		}
 //		Comprobación de los datos calculados
 		System.out.println("ha hallado la ecuación de las rectas de N Tramos: " + vTramos.size());
