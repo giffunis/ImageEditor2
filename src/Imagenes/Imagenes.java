@@ -419,8 +419,41 @@ public class Imagenes{
         }
 		Imagenes newImagen = new Imagenes(this.api,outImage);
 		newImagen.empaquetarImagen();
-		
 	}
 	
+	
+	public void correcGamma(double g){
+		
+		BufferedImage outImage = deepCopy(this.imagenReal);
+		Vector<Integer> tabla = new Vector<Integer>(0);
+		double vIn,vOut;
+		
+		System.out.println("Tabla de corrección gamma");
+		System.out.println("Vin | Vout");
+		
+		for(int i = 0; i < SIZE; i++){
+			vIn = ((double) i) / (SIZE - 1);
+			vOut = Math.pow(vIn,g);
+			tabla.add((int)(vOut * (SIZE - 1)));
+			System.out.println(i + "  " + tabla.get(i));
+		}
+		
+		
+		for( int i = 0; i < outImage.getWidth(); i++ ){
+			int valor;
+			Color colorAux;
+            for( int j = 0; j < outImage.getHeight(); j++ ){
+                //Almacenamos el color del píxel
+                colorAux=new Color(outImage.getRGB(i, j));
+                //Calculamos la media de los tres canales (rojo, verde, azul)
+                valor = tabla.get(colorAux.getRed());
+                colorAux = new Color(valor,valor,valor);
+                //Asignamos el nuevo valor al BufferedImage
+                outImage.setRGB(i, j,colorAux.getRGB());
+            }
+        }
+		Imagenes newImagen = new Imagenes(this.api,outImage);
+		newImagen.empaquetarImagen();
+	}
 	
 }

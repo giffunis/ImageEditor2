@@ -28,6 +28,7 @@ public class JToolBar2 extends JToolBar{
 			initHistogramaAcumulado();
 			initAjusteLineal();
 			ecuaHisto();
+			gamma();
 		}
 		
 		// function to create a Button
@@ -216,6 +217,68 @@ public class JToolBar2 extends JToolBar{
 		private void btnEcuaHistoActionPerformed(java.awt.event.ActionEvent evt) {
 			int pos = getImageFromInternalFrame();
 			api.imagenes.get(pos).ecualizarHisto();
-		}		
+		}	
+		
+//----------------------------------------CORRECCIÓN GAMMA------------------------------------------
+	
+		void gamma(){
+			createBtn("Corrección Gamma",Thread.currentThread().getContextClassLoader().getResource("Images/histogram1.png"));
+			btnItem.addActionListener(new java.awt.event.ActionListener() {
+	            public void actionPerformed(java.awt.event.ActionEvent evt) {
+	                btnGammaActionPerformed(evt);
+	            }
+	        });
+			add(btnItem);
+		}
+		
+		private void btnGammaActionPerformed(java.awt.event.ActionEvent evt) {
+			int pos = getImageFromInternalFrame();
+			
+			JFrame marco = new JFrame("Factor de gamma");
+			JPanel panel = new JPanel();
+			JLabel label = new JLabel("Factor gamma: ");
+			JTextField factor = new JTextField(2);
+			JButton btnAccept = new JButton("Aceptar");
+			JButton btnCancel = new JButton("Cancelar");
+			//final int [] nTramos = new int [1];
+			
+			panel.setLayout( new GridLayout(2,2));
+			panel.add(label);
+			panel.add(factor);
+			panel.add(btnAccept);
+			panel.add(btnCancel);
+			panel.setVisible(true);
+			marco.add(panel);
+			marco.pack();
+			marco.setVisible(true);
+			
+			btnAccept.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					try{
+						double g = Double.parseDouble(factor.getText());
+						marco.dispose();
+						api.imagenes.get(pos).correcGamma(g);
+						
+					} catch(Exception a){
+						//System.out.println("No ha introducido ningún valor");
+					}
+				}
+			});
+			
+			btnCancel.addActionListener(new ActionListener() {	
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					try {
+						marco.dispose();
+					} catch (Exception e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+				}
+			});
+			
+
+		}
 
 }
