@@ -27,6 +27,7 @@ public class JToolBar2 extends JToolBar{
 			initHistogramaAbsoluto();
 			initHistogramaAcumulado();
 			initAjusteLineal();
+			ecuaHisto();
 		}
 		
 		// function to create a Button
@@ -201,4 +202,20 @@ public class JToolBar2 extends JToolBar{
 			NTramos();
 		}
 		
+//----------------------------------------ECUALIZACION DEL HISTOGRAMA------------------------------------------
+		void ecuaHisto(){
+			createBtn("Ecualización del histograma",Thread.currentThread().getContextClassLoader().getResource("Images/histogram1.png"));
+			btnItem.addActionListener(new java.awt.event.ActionListener() {
+	            public void actionPerformed(java.awt.event.ActionEvent evt) {
+	                btnEcuaHistoActionPerformed(evt);
+	            }
+	        });
+			add(btnItem);
+		}
+		
+		private void btnEcuaHistoActionPerformed(java.awt.event.ActionEvent evt) {
+			int pos = getImageFromInternalFrame();
+			api.imagenes.get(pos).ecualizarHisto();
+		}		
+
 }

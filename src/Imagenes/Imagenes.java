@@ -62,8 +62,8 @@ public class Imagenes{
 	private int minColor(){
 		int i = 0, min = 0;
 		do{
-			min = i;
 			i++;
+			min = i;
 		}while(this.histo.get(i) == 0);
 		return min;
 	}
@@ -135,6 +135,11 @@ public class Imagenes{
                 aux = new Color(this.imagenReal.getRGB(i, j));
                 histo.set(aux.getRed(),histo.get(aux.getRed()) + 1);
             }
+    	
+    	for(int i = 0; i < histo.size(); i++)
+    		System.out.println("color = " + i + "; cantidad de pixels: " + histo.get(i));
+
+    		
     }
 	
 	private void initHistogramaAcumulado(){
@@ -378,6 +383,43 @@ public class Imagenes{
         }
 		Imagenes newImagen = new Imagenes(this.api,outImage);
 		newImagen.empaquetarImagen();
+	}
+	
+	public void ecualizarHisto(){
+		
+		BufferedImage outImage = deepCopy(this.imagenReal);
+		Vector<Integer> tabla = new Vector<Integer>(0);
+		float nume;
+		int deno, redondeado;
+		
+		System.out.println("Tabla de ecualización del histograma");
+		System.out.println("Vin | Vout");
+				
+		for(int i = 0; i < SIZE; i++){
+			nume = (float)(SIZE * acumulado.get(i));
+			deno = outImage.getHeight() * outImage.getWidth();
+			redondeado = (int) (nume / deno);
+			tabla.add(Math.max(0, redondeado - 1));
+			System.out.println(i + "  " + tabla.get(i));
+		}
+		
+		
+		for( int i = 0; i < outImage.getWidth(); i++ ){
+			int valor;
+			Color colorAux;
+            for( int j = 0; j < outImage.getHeight(); j++ ){
+                //Almacenamos el color del píxel
+                colorAux=new Color(outImage.getRGB(i, j));
+                //Calculamos la media de los tres canales (rojo, verde, azul)
+                valor = tabla.get(colorAux.getRed());
+                colorAux = new Color(valor,valor,valor);
+                //Asignamos el nuevo valor al BufferedImage
+                outImage.setRGB(i, j,colorAux.getRGB());
+            }
+        }
+		Imagenes newImagen = new Imagenes(this.api,outImage);
+		newImagen.empaquetarImagen();
+		
 	}
 	
 	
