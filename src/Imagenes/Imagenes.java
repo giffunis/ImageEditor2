@@ -456,4 +456,114 @@ public class Imagenes{
 		newImagen.empaquetarImagen();
 	}
 	
+	public void espeHisto(){
+		
+        BufferedImage auxImage = null;
+        JFileChooser selector=new JFileChooser();
+        selector.setDialogTitle("Seleccione una imagen");
+        FileNameExtensionFilter filtroImagen = new FileNameExtensionFilter("JPG & GIF & BMP & PNG", "jpg", "gif", "bmp", "png");
+        selector.setFileFilter(filtroImagen);
+        int flag = selector.showOpenDialog(null);
+        if(flag == JFileChooser.APPROVE_OPTION){
+            try {
+                File imagenSeleccionada=selector.getSelectedFile();
+                auxImage = ImageIO.read(imagenSeleccionada);
+                this.nombre = imagenSeleccionada.getName();
+            } catch (Exception e) {
+            	JOptionPane.showMessageDialog(new JFrame(), "Se produjo un error al cargar la imagen");
+            }    
+        }
+         
+//      Cálculo del histograma absoluto de la imagen auxiliar.
+        Vector<Integer> histo_aux = new Vector<Integer>(0);
+    	Color aux;
+    	int auxImageSize = auxImage.getWidth() * auxImage.getHeight();
+    	int imagenRealSize = imagenReal.getWidth() * imagenReal.getHeight();
+
+    	for(int i = 0; i < SIZE; i++)
+    		histo_aux.addElement(0);
+    	
+    	for( int i = 0; i < auxImage.getWidth(); i++ )
+            for( int j = 0; j < auxImage.getHeight(); j++ ){
+                aux = new Color(auxImage.getRGB(i, j));
+                histo_aux.set(aux.getRed(),histo_aux.get(aux.getRed()) + 1);
+            }
+    	
+//    	Cálculo del histograma acumulado de la imagen auxiliar
+        
+    	Vector<Integer> acumulado_aux = new Vector<Integer>(0);
+		acumulado_aux.addElement(histo_aux.get(0));
+    	for(int i = 1; i< histo_aux.size(); i++)
+    		acumulado_aux.addElement(acumulado_aux.get(i - 1) + histo_aux.get(i));
+    	
+//		Normalización del histograma acumulado de la imagen auxiliar.
+    	
+    	Vector<Float> auxImageAcumNorm = new Vector<Float>(0);
+    	for(int i = 0; i < SIZE; i++)
+    		auxImageAcumNorm.addElement((float)0);
+    	for(int i = 0; i < acumulado_aux.size(); i++){
+    		auxImageAcumNorm.set(i, ((float)acumulado_aux.get(i))/auxImageSize);
+    	}
+    	
+// 		Normalización del histograma acumulado de la imagen a cambiar.
+    	
+    	Vector<Float> imagenRealAcumNorm = new Vector<Float>(0);
+    	for(int i = 0; i < SIZE; i++)
+    		imagenRealAcumNorm.addElement((float)0);
+    	for(int i = 0; i < acumulado_aux.size(); i++){
+    		imagenRealAcumNorm.set(i, ((float)this.acumulado.get(i))/imagenRealSize);
+    	}
+    	
+//    	Cálculo de la tabla de transformación
+    	Vector<Integer> tabla = new Vector<Integer>(0);
+    	float lastDife, auxDif;
+    	int indice = 0;
+    	
+    	for(int i = 0; i < SIZE; i++)
+    		tabla.addElement(0);
+    	
+    	
+//    	System.out.println("Tamaño de vector acumulado Real Normalizado: " + imagenRealAcumNorm.size());
+//    	System.out.println("Tamaño de vector acumulado Imagen Auxiliar: " + auxImageAcumNorm.size());
+//    	System.out.println("Tamaño de la tabla: " + tabla.size());
+
+    	for(int i = 0; i < SIZE; i++){
+    		lastDife = 9999;
+    		for(int j = 0; j < SIZE; j++){
+    			auxDif = Math.abs(auxImageAcumNorm.get(j) - imagenRealAcumNorm.get(i));
+    			if(auxDif <= lastDife){
+    				lastDife = auxDif;
+    				indice = j;
+    			}
+    		}
+    	//System.out.println("i: " + i);
+    	tabla.set(i, indice);	
+    	}
+    	
+//    	Creación de la nueva imagen con la tabla dada.
+    	
+    	//Copia de la imagen anterior
+    	
+    	BufferedImage outImage = deepCopy(this.imagenReal);
+    	
+    	//set con la tabla
+    	
+    	for( int i = 0; i < outImage.getWidth(); i++ ){
+			int valor;
+			Color colorAux;
+            for( int j = 0; j < outImage.getHeight(); j++ ){
+                //Almacenamos el color del píxel
+                colorAux=new Color(outImage.getRGB(i, j));
+                //Calculamos la media de los tres canales (rojo, verde, azul)
+                valor = tabla.get(colorAux.getRed());
+                colorAux = new Color(valor,valor,valor);
+                //Asignamos el nuevo valor al BufferedImage
+                outImage.setRGB(i, j,colorAux.getRGB());
+            }
+        }
+		Imagenes newImagen = new Imagenes(this.api,outImage);
+		newImagen.empaquetarImagen();
+
+	}
+	
 }

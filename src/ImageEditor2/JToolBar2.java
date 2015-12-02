@@ -29,6 +29,7 @@ public class JToolBar2 extends JToolBar{
 			initAjusteLineal();
 			ecuaHisto();
 			gamma();
+			especificacionHistograma();
 		}
 		
 		// function to create a Button
@@ -279,6 +280,21 @@ public class JToolBar2 extends JToolBar{
 			});
 			
 
+		}
+		
+		void especificacionHistograma(){
+			createBtn("Especificación del Histograma",Thread.currentThread().getContextClassLoader().getResource("Images/histogram1.png"));
+			btnItem.addActionListener(new java.awt.event.ActionListener() {
+	            public void actionPerformed(java.awt.event.ActionEvent evt) {
+	                btnEspecificacionHistogramaActionPerformed(evt);
+	            }
+	        });
+			add(btnItem);
+		}
+		
+		private void btnEspecificacionHistogramaActionPerformed(java.awt.event.ActionEvent evt) {
+			int pos = getImageFromInternalFrame();
+			api.imagenes.get(pos).espeHisto();
 		}
 
 }
