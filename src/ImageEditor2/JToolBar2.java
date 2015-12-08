@@ -32,6 +32,7 @@ public class JToolBar2 extends JToolBar{
 			especificacionHistograma();
 			calc_entropia();
 			BrilloContraste();
+			difImages();
 		}
 		
 		// function to create a Button
@@ -405,5 +406,20 @@ public class JToolBar2 extends JToolBar{
 		});
 		
 	}
+	
+	void difImages(){
+		createBtn("Diferencia de imágenes",Thread.currentThread().getContextClassLoader().getResource("Images/histogram1.png"));
+		btnItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDifImagesActionPerformed(evt);
+            }
+        });
+		add(btnItem);
+	}
+	
+	private void btnDifImagesActionPerformed(java.awt.event.ActionEvent evt) {
+		int pos = getImageFromInternalFrame();
+		api.imagenes.get(pos).diferenciaImagenes();
+	}	
 
 }

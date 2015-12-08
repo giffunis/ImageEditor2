@@ -645,8 +645,55 @@ public class Imagenes{
         }
 		Imagenes newImagen = new Imagenes(this.api,outImage);
 		newImagen.empaquetarImagen();
-
+	}
+	
+	
+	
+	
+	
+	
+	public void diferenciaImagenes(){
 		
+        BufferedImage auxImage = null;
+        JFileChooser selector=new JFileChooser();
+        selector.setDialogTitle("Seleccione una imagen");
+        FileNameExtensionFilter filtroImagen = new FileNameExtensionFilter("JPG & GIF & BMP & PNG", "jpg", "gif", "bmp", "png");
+        selector.setFileFilter(filtroImagen);
+        int flag = selector.showOpenDialog(null);
+        if(flag == JFileChooser.APPROVE_OPTION){
+            try {
+                File imagenSeleccionada=selector.getSelectedFile();
+                auxImage = ImageIO.read(imagenSeleccionada);
+                this.nombre = imagenSeleccionada.getName();
+            } catch (Exception e) {
+            	JOptionPane.showMessageDialog(new JFrame(), "Se produjo un error al cargar la imagen");
+            }    
+        }
+           
+    	//Copia de la imagen actual
+    	
+    	BufferedImage outImage = deepCopy(this.imagenReal);
+    	
+    	//set con la tabla
+    	
+    	for( int i = 0; i < outImage.getWidth(); i++ ){
+			int valor;
+			Color colorAux;
+			Color colorI1, colorI2;
+            for( int j = 0; j < outImage.getHeight(); j++ ){
+                //Almacenamos el color del píxel
+                colorI1 = new Color(auxImage.getRGB(i, j));
+                colorI2 = new Color(imagenReal.getRGB(i, j));
+                //Calculamos la media de los tres canales (rojo, verde, azul)
+                valor = Math.abs(colorI1.getRed() - colorI2.getRed());
+                colorAux = new Color(valor,valor,valor);
+                //Asignamos el nuevo valor al BufferedImage
+                outImage.setRGB(i, j,colorAux.getRGB());
+            }
+        }
+		Imagenes newImagen = new Imagenes(this.api,outImage);
+		newImagen.empaquetarImagen();
+
 	}
 	
 }
