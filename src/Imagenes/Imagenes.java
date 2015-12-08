@@ -42,6 +42,7 @@ public class Imagenes{
 	private String nombre;
 	public JLabel posXY;
 	private int brillo;
+	private int contraste;
 	
 	/*
 	 * Constructor. It needs the main application of ImageEditor2
@@ -158,6 +159,7 @@ public class Imagenes{
 		initHistogramaAbsoluto();
 		initHistogramaAcumulado();
 		calculateBrillo();
+		calculateContraste();
 		initStatusBar();
 		internalFrame.add(panel);
 		internalFrame.add(statusBar,BorderLayout.SOUTH);
@@ -564,6 +566,36 @@ public class Imagenes{
 		Imagenes newImagen = new Imagenes(this.api,outImage);
 		newImagen.empaquetarImagen();
 
+	}
+	
+	public double entropia(){
+		double prob = 0, sumatorio = 0, log2P = 0;
+		for(int i = 0; i < SIZE; i++){
+			prob = ((double)this.histo.get(i)) / (imagenReal.getHeight() * imagenReal.getWidth());
+			if(prob != 0)
+				log2P = (double)(Math.log(prob) / Math.log(2));
+			else
+				log2P = 0;
+			sumatorio = sumatorio + (prob * log2P);
+			System.out.println("p[" + i +"] = " + prob);
+			System.out.println("log2P[" + i +"] = " + log2P);
+			System.out.println("sum[" + i +"] = " + sumatorio);
+
+		}
+		return sumatorio * -1;
+	}
+	
+	private void calculateContraste(){
+		double sumatorio = 0;
+		
+		for(int i = 0; i < SIZE; i++){
+			sumatorio = sumatorio + (this.histo.get(i) * Math.pow((i - this.brillo), 2));
+		}
+		this.contraste = (int) Math.sqrt(sumatorio/(imagenReal.getHeight() * imagenReal.getWidth()));
+	}
+	
+	public int getContraste(){
+		return this.contraste;
 	}
 	
 }

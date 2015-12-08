@@ -30,6 +30,7 @@ public class JToolBar2 extends JToolBar{
 			ecuaHisto();
 			gamma();
 			especificacionHistograma();
+			calc_entropia();
 		}
 		
 		// function to create a Button
@@ -296,5 +297,46 @@ public class JToolBar2 extends JToolBar{
 			int pos = getImageFromInternalFrame();
 			api.imagenes.get(pos).espeHisto();
 		}
+		
+		//----------------------------------------ENTROPÍA------------------------------------------
+				void calc_entropia(){
+					createBtn("Entropia",Thread.currentThread().getContextClassLoader().getResource("Images/histogram2.png"));
+					btnItem.addActionListener(new java.awt.event.ActionListener() {
+			            public void actionPerformed(java.awt.event.ActionEvent evt) {
+			                btnEntropiaActionPerformed(evt);
+			            }
+			        });
+					add(btnItem);
+				}
+				
+				private void btnEntropiaActionPerformed(java.awt.event.ActionEvent evt) {
+					int pos = getImageFromInternalFrame();
+					
+					JFrame marco = new JFrame("Entropía");
+					JPanel panel = new JPanel();
+					JLabel label = new JLabel("Entropía: " + api.imagenes.get(pos).entropia());
+					JButton btnAccept = new JButton("Aceptar");
+					
+					panel.setLayout( new GridLayout(2,1));
+					panel.add(label);
+					panel.add(btnAccept);
+					panel.setVisible(true);
+					marco.add(panel);
+					marco.pack();
+					marco.setVisible(true);
+					
+					btnAccept.addActionListener(new ActionListener() {	
+						@Override
+						public void actionPerformed(ActionEvent e) {
+							try {
+								marco.dispose();
+							} catch (Exception e1) {
+								// TODO Auto-generated catch block
+								e1.printStackTrace();
+							}
+						}
+					});
+					
+				}
 
 }

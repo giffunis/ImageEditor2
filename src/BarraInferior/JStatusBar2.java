@@ -22,6 +22,7 @@ public class JStatusBar2 extends JPanel{
   JLabel shadeOfGrayMouse = null;
   JLabel positionMouse = null;
   JLabel brillo = null;
+  JLabel contraste = null;
   Imagenes image;
 
   public JStatusBar2(Imagenes image){
@@ -42,6 +43,8 @@ public class JStatusBar2 extends JPanel{
     minMax.setHorizontalAlignment(SwingConstants.LEFT);
     brillo = new JLabel("Brillo: " + image.getBrillo());
     brillo.setHorizontalAlignment(SwingConstants.LEFT);
+    contraste = new JLabel("Contraste: " + image.getContraste());
+    contraste.setHorizontalAlignment(SwingConstants.LEFT);
     shadeOfGrayMouse = new JLabel("Grey Color:");
     shadeOfGrayMouse.setHorizontalAlignment(SwingConstants.LEFT);
     positionMouse = new JLabel("pixel:");
@@ -55,6 +58,8 @@ public class JStatusBar2 extends JPanel{
 	this.add(minMax);
 	this.add(new JLabel(" | "));
 	this.add(brillo);
+	this.add(new JLabel(" | "));
+	this.add(contraste);
 	this.add(new JLabel(" | "));
 	this.add(shadeOfGrayMouse);
 	this.add(new JLabel(" | "));
