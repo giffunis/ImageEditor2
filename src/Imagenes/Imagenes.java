@@ -598,4 +598,55 @@ public class Imagenes{
 		return this.contraste;
 	}
 	
+	public void setBrilloContraste(int newBrillo, int newContraste){
+		float a = (((float) newContraste) / this.contraste);
+		float b = ((float) newBrillo) - a * this.brillo;
+		Vector<Integer> tabla = new Vector<Integer>(0);
+		int aux = 0;
+		
+		System.out.println("newBrillo: " + newBrillo);
+		System.out.println("newContraste: " + newContraste);
+		System.out.println("a: " + a);
+		System.out.println("b: " + b);
+		
+		for(int i = 0; i < SIZE; i++)
+    		tabla.addElement(0);
+		System.out.println("Vin | Vout ");
+		for(int i = 0; i < SIZE; i++){
+			aux = (int)(a * i + b);
+			if(aux < 0)
+				aux = 0;
+			if(aux >= SIZE)
+				aux = SIZE - 1;
+			tabla.set(i, aux);
+			System.out.println(i + " | " + tabla.get(i) );
+		}
+		
+//    	Creación de la nueva imagen con la tabla dada.
+    	
+    	//Copia de la imagen anterior
+    	
+    	BufferedImage outImage = deepCopy(this.imagenReal);
+    	
+    	//set con la tabla
+    	
+    	for( int i = 0; i < outImage.getWidth(); i++ ){
+			int valor;
+			Color colorAux;
+            for( int j = 0; j < outImage.getHeight(); j++ ){
+                //Almacenamos el color del píxel
+                colorAux=new Color(outImage.getRGB(i, j));
+                //Calculamos la media de los tres canales (rojo, verde, azul)
+                valor = tabla.get(colorAux.getRed());
+                colorAux = new Color(valor,valor,valor);
+                //Asignamos el nuevo valor al BufferedImage
+                outImage.setRGB(i, j,colorAux.getRGB());
+            }
+        }
+		Imagenes newImagen = new Imagenes(this.api,outImage);
+		newImagen.empaquetarImagen();
+
+		
+	}
+	
 }

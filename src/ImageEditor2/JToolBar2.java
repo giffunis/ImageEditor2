@@ -31,6 +31,7 @@ public class JToolBar2 extends JToolBar{
 			gamma();
 			especificacionHistograma();
 			calc_entropia();
+			BrilloContraste();
 		}
 		
 		// function to create a Button
@@ -338,5 +339,71 @@ public class JToolBar2 extends JToolBar{
 					});
 					
 				}
+				
+		//----------------------------------------BRILLO Y CONTRASTE------------------------------------------
+
+	void BrilloContraste(){
+		createBtn("Brillo y Contraste",Thread.currentThread().getContextClassLoader().getResource("Images/histogram2.png"));
+		btnItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBrilloContrasteActionPerformed(evt);
+            }
+        });
+		add(btnItem);
+	}
+	
+	private void btnBrilloContrasteActionPerformed(java.awt.event.ActionEvent evt) {
+		int pos = getImageFromInternalFrame();
+		
+		JFrame marco = new JFrame("Brillo y Contraste");
+		JPanel panel = new JPanel();
+		JLabel label = new JLabel("Brillo: " + api.imagenes.get(pos).getBrillo());
+		JLabel label2 = new JLabel("Contraste: " + api.imagenes.get(pos).getContraste());
+		JButton btnAccept = new JButton("Aceptar");
+		JButton btnCancel = new JButton("Cancelar");
+		JTextField newBrillo = new JTextField(2);
+		JTextField newContraste = new JTextField(2);
+		
+		panel.setLayout( new GridLayout(3,2));
+		panel.add(label);
+		panel.add(newBrillo);
+		panel.add(label2);
+		panel.add(newContraste);
+		panel.add(btnAccept);
+		panel.add(btnCancel);
+		panel.setVisible(true);
+		marco.add(panel);
+		marco.pack();
+		marco.setVisible(true);
+		
+		btnAccept.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				try{
+					marco.dispose();
+					int brillo = Integer.parseInt(newBrillo.getText());
+					int contraste = Integer.parseInt(newContraste.getText());
+					api.imagenes.get(pos).setBrilloContraste(brillo, contraste);
+					marco.dispose();
+					
+				} catch(Exception a){
+					//System.out.println("No ha introducido ningún valor");
+				}
+			}
+		});
+		
+		btnCancel.addActionListener(new ActionListener() {	
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				try {
+					marco.dispose();
+				} catch (Exception e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			}
+		});
+		
+	}
 
 }
