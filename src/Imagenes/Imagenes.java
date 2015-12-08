@@ -44,6 +44,9 @@ public class Imagenes{
 	private int brillo;
 	private int contraste;
 	
+	public Point origin;
+	public Point end;
+	
 	/*
 	 * Constructor. It needs the main application of ImageEditor2
 	 */
@@ -118,10 +121,12 @@ public class Imagenes{
 	private void init_panel(){
 		label = new JLabel();
 		label.setIcon(new ImageIcon(imagenReal));	
+		ImagenesOnClick listImage = new ImagenesOnClick(this);
+        label.addMouseListener(listImage);
 		panel = new JPanel(new GridBagLayout());
 		panel.add(label);
-		ImagenesOnClick listImage = new ImagenesOnClick(this);
-        panel.addMouseListener(listImage);
+//		ImagenesOnClick listImage = new ImagenesOnClick(this);
+//        panel.addMouseListener(listImage);
 	}
 	
 	private void initHistogramaAbsoluto(){  
@@ -695,5 +700,27 @@ public class Imagenes{
 		newImagen.empaquetarImagen();
 
 	}
+	
+	public void regionInteres(Point origenAux, Point endAux){
+		int alto = Math.abs(origenAux.y - endAux.y);
+		int ancho = Math.abs(origenAux.x - endAux.x);
+		
+		BufferedImage outImage = new BufferedImage(ancho,alto,imagenReal.getType());
+		
+		System.out.println("alto: " + outImage.getHeight());
+		System.out.println("ancho: " + outImage.getWidth());
+		
+		Color colorAux;
+		for(int i = 0; i < outImage.getWidth(); i++){
+			for(int j = 0; j < outImage.getHeight(); j++){
+				colorAux = new Color(imagenReal.getRGB(origenAux.x + i,origenAux.y + j));
+				outImage.setRGB(i, j,colorAux.getRGB());
+			}
+		}
+		Imagenes newImagen = new Imagenes(this.api,outImage);
+		newImagen.empaquetarImagen();
+
+	}
+	
 	
 }

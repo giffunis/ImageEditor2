@@ -2,6 +2,7 @@ package ImageEditor2;
 
 
 import java.awt.GridLayout;
+import java.awt.Point;
 import java.net.URL;
 
 import javax.swing.*;
@@ -33,6 +34,7 @@ public class JToolBar2 extends JToolBar{
 			calc_entropia();
 			BrilloContraste();
 			difImages();
+			roi();
 		}
 		
 		// function to create a Button
@@ -420,6 +422,27 @@ public class JToolBar2 extends JToolBar{
 	private void btnDifImagesActionPerformed(java.awt.event.ActionEvent evt) {
 		int pos = getImageFromInternalFrame();
 		api.imagenes.get(pos).diferenciaImagenes();
+	}	
+	
+	void roi(){
+		createBtn("ROI",Thread.currentThread().getContextClassLoader().getResource("Images/histogram1.png"));
+		btnItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnROIActionPerformed(evt);
+            }
+        });
+		add(btnItem);
+	}
+	
+	private void btnROIActionPerformed(java.awt.event.ActionEvent evt) {
+		int pos = getImageFromInternalFrame();
+		Point origen = api.imagenes.get(pos).origin;
+		Point end = api.imagenes.get(pos).end;
+		System.out.println("PuntoOrigen " + origen);
+		System.out.println("PuntoOrigen " + end);
+		
+		api.imagenes.get(pos).regionInteres(origen,end);
+		
 	}	
 
 }
