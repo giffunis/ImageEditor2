@@ -722,5 +722,45 @@ public class Imagenes{
 
 	}
 	
+	public void noCambio(int umbralT){
+		// Abro la nueva imagen
+		BufferedImage imagenOriginal = null;
+        JFileChooser selector=new JFileChooser();
+        selector.setDialogTitle("Seleccione una imagen");
+        FileNameExtensionFilter filtroImagen = new FileNameExtensionFilter("JPG & GIF & BMP & PNG", "jpg", "gif", "bmp", "png");
+        selector.setFileFilter(filtroImagen);
+        int flag = selector.showOpenDialog(null);
+        if(flag == JFileChooser.APPROVE_OPTION){
+            try {
+                File imagenSeleccionada=selector.getSelectedFile();
+                imagenOriginal = ImageIO.read(imagenSeleccionada);
+                this.nombre = imagenSeleccionada.getName();
+            } catch (Exception e) {
+            	JOptionPane.showMessageDialog(new JFrame(), "Se produjo un error al cargar la imagen");
+            }    
+        }
+       
+        Color colorDiferencia;
+//        Color colorOriginal;
+        Color colorNoCambio;
+        
+        // Imagen real es en este caso la imagen diferencia
+        // y imagenOriginal es la imagen original que habrimos y en la que vamos a pintar de rojo.
+        
+       for(int i = 0; i < imagenReal.getWidth(); i++){
+    	   for(int j = 0; j < imagenReal.getHeight(); j++){
+    		   colorDiferencia = new Color(imagenReal.getRGB(i, j));
+    		   if(colorDiferencia.getRed() >= umbralT){
+//    			   colorOriginal = new Color(imagenOriginal.getRGB(i, j));
+    			   colorNoCambio = new Color(255,0,0);
+    			   imagenOriginal.setRGB(i, j,colorNoCambio.getRGB());
+    		   }
+    	   }
+       }
+        
+       Imagenes newImagen = new Imagenes(this.api,imagenOriginal);
+		newImagen.empaquetarImagen();
+       
+	}
 	
 }
