@@ -741,24 +741,45 @@ public class Imagenes{
         }
        
         Color colorDiferencia;
-//        Color colorOriginal;
+        Color colorOriginal;
         Color colorNoCambio;
         
         // Imagen real es en este caso la imagen diferencia
         // y imagenOriginal es la imagen original que habrimos y en la que vamos a pintar de rojo.
+//        
+//       for(int i = 0; i < imagenReal.getWidth(); i++){
+//    	   for(int j = 0; j < imagenReal.getHeight(); j++){
+//    		   colorDiferencia = new Color(imagenReal.getRGB(i, j));
+//    		   if(colorDiferencia.getRed() >= umbralT){
+////    			   colorOriginal = new Color(imagenOriginal.getRGB(i, j));
+//    			   colorNoCambio = new Color(255,0,0);
+//    			   imagenOriginal.setRGB(i, j,colorNoCambio.getRGB());
+//    		   }
+//    	   }
+//       }
+       
+		BufferedImage outImage = new BufferedImage(imagenReal.getWidth(),imagenReal.getHeight(),BufferedImage.TYPE_INT_RGB);
+
+		for(int i = 0; i < imagenReal.getWidth(); i++){
+	    	   for(int j = 0; j < imagenReal.getHeight(); j++){
+	    		   colorDiferencia = new Color(imagenReal.getRGB(i, j));
+	    		   if(colorDiferencia.getRed() >= umbralT){
+	    			   colorNoCambio = new Color(255,0,0);
+	    			   outImage.setRGB(i, j,colorNoCambio.getRGB());
+	    		   }
+	    		   else{
+	    			   colorOriginal = new Color(imagenOriginal.getRGB(i, j));
+	    			   outImage.setRGB(i, j, colorOriginal.getRGB());
+	    		   }
+	    	   }
+	       }
+       
+       
+       
+       
+//		System.out.println("Typo: " + imagenOriginal.getType());
         
-       for(int i = 0; i < imagenReal.getWidth(); i++){
-    	   for(int j = 0; j < imagenReal.getHeight(); j++){
-    		   colorDiferencia = new Color(imagenReal.getRGB(i, j));
-    		   if(colorDiferencia.getRed() >= umbralT){
-//    			   colorOriginal = new Color(imagenOriginal.getRGB(i, j));
-    			   colorNoCambio = new Color(255,0,0);
-    			   imagenOriginal.setRGB(i, j,colorNoCambio.getRGB());
-    		   }
-    	   }
-       }
-        
-       Imagenes newImagen = new Imagenes(this.api,imagenOriginal);
+       Imagenes newImagen = new Imagenes(this.api,outImage);
 		newImagen.empaquetarImagen();
        
 	}
