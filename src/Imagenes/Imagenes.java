@@ -784,4 +784,40 @@ public class Imagenes{
        
 	}
 	
+	public void espejoVertical(){
+		BufferedImage outImage = new BufferedImage(imagenReal.getWidth(),imagenReal.getHeight(),BufferedImage.TYPE_INT_RGB);
+		Color colorAux;
+		int height = imagenReal.getHeight() - 1;
+		
+		for(int i = 0; i < imagenReal.getWidth(); i++){
+	    	   for(int j = 0; j < imagenReal.getHeight(); j++){
+	    		   colorAux = new Color(imagenReal.getRGB(i, j));
+	    		   outImage.setRGB(i,height - j,colorAux.getRGB());
+	    	   }
+	       }
+		
+		
+		Imagenes newImagen = new Imagenes(this.api,outImage);
+		newImagen.empaquetarImagen();		
+	}
+	
+	
+	public void espejoHorizontal(){
+		BufferedImage outImage = new BufferedImage(imagenReal.getWidth(),imagenReal.getHeight(),BufferedImage.TYPE_INT_RGB);
+		Color colorAux;
+		int width = imagenReal.getWidth() - 1;
+		
+		for(int i = 0; i < imagenReal.getWidth(); i++){
+	    	   for(int j = 0; j < imagenReal.getHeight(); j++){
+	    		   colorAux = new Color(imagenReal.getRGB(i, j));
+	    		   outImage.setRGB(width - i,j,colorAux.getRGB());
+	    	   }
+	       }
+		
+		
+		Imagenes newImagen = new Imagenes(this.api,outImage);
+		newImagen.empaquetarImagen();	
+	}
+	
+	
 }

@@ -36,6 +36,8 @@ public class JToolBar2 extends JToolBar{
 			difImages();
 			roi();
 			no_cambio();
+			espHor();
+			espVer();
 		}
 		
 		// function to create a Button
@@ -511,7 +513,42 @@ public class JToolBar2 extends JToolBar{
 			}
 		});
 		
-
 	}
+	
+	//----------------------------------------ESPEJO HORIZONTAL------------------------------------------
+	
 
+	void espHor(){
+		createBtn("Espejo Horizontal",Thread.currentThread().getContextClassLoader().getResource("Images/histogram1.png"));
+		btnItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEspHorActionPerformed(evt);
+            }
+        });
+		add(btnItem);
+	}
+	
+	private void btnEspHorActionPerformed(java.awt.event.ActionEvent evt) {
+		int pos = getImageFromInternalFrame();
+		api.imagenes.get(pos).espejoHorizontal();
+	}	
+
+
+	//----------------------------------------ESPEJO VERTICAL------------------------------------------
+	
+
+	void espVer(){
+		createBtn("Espejo Horizontal",Thread.currentThread().getContextClassLoader().getResource("Images/histogram1.png"));
+		btnItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEspVerActionPerformed(evt);
+            }
+        });
+		add(btnItem);
+	}
+	
+	private void btnEspVerActionPerformed(java.awt.event.ActionEvent evt) {
+		int pos = getImageFromInternalFrame();
+		api.imagenes.get(pos).espejoVertical();
+	}	
 }
