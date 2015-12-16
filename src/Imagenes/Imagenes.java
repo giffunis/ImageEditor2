@@ -816,7 +816,23 @@ public class Imagenes{
 		
 		
 		Imagenes newImagen = new Imagenes(this.api,outImage);
-		newImagen.empaquetarImagen();	
+		newImagen.empaquetarImagen();
+	}
+	
+	public void traspuesta(){
+		BufferedImage outImage = new BufferedImage(imagenReal.getHeight(),imagenReal.getWidth(),BufferedImage.TYPE_INT_RGB);
+		Color colorAux;
+		
+		for(int i = 0; i < imagenReal.getWidth(); i++){
+	    	   for(int j = 0; j < imagenReal.getHeight(); j++){
+	    		   colorAux = new Color(imagenReal.getRGB(i, j));
+	    		   outImage.setRGB(j,i,colorAux.getRGB());
+	    	   }
+	       }
+		
+		
+		Imagenes newImagen = new Imagenes(this.api,outImage);
+		newImagen.empaquetarImagen();
 	}
 	
 	

@@ -38,6 +38,7 @@ public class JToolBar2 extends JToolBar{
 			no_cambio();
 			espHor();
 			espVer();
+			tras();
 		}
 		
 		// function to create a Button
@@ -551,4 +552,23 @@ public class JToolBar2 extends JToolBar{
 		int pos = getImageFromInternalFrame();
 		api.imagenes.get(pos).espejoVertical();
 	}	
+	
+	//----------------------------------------TRASPUESTA------------------------------------------
+	
+
+	void tras(){
+		createBtn("Traspuesta",Thread.currentThread().getContextClassLoader().getResource("Images/histogram1.png"));
+		btnItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnTraspuestaActionPerformed(evt);
+            }
+        });
+		add(btnItem);
+	}
+	
+	private void btnTraspuestaActionPerformed(java.awt.event.ActionEvent evt) {
+		int pos = getImageFromInternalFrame();
+		api.imagenes.get(pos).traspuesta();
+	}	
+	
 }
