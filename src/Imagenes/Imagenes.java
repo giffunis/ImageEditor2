@@ -835,5 +835,87 @@ public class Imagenes{
 		newImagen.empaquetarImagen();
 	}
 	
+	private Color vecino(int newAncho, int newAlto, int i, int j){
+		float a = ((float) newAncho) / (imagenReal.getWidth() -1);
+		float b = ((float) newAlto) / (imagenReal.getHeight() - 1);
+		
+		int x = Math.round(((float)i) / a);
+		int y = Math.round(((float)j) / b);
+		
+//		System.out.println("a = " + a);
+//		System.out.println("b = " + b);
+//		System.out.println("i = " + i);
+//		System.out.println("j = " + j);
+//		System.out.println("x = " + x);
+//		System.out.println("y = " + y);
+		
+		return new Color(imagenReal.getRGB(x, y));
+	}
+	
+	private Color bilineal(int newAncho, int newAlto, int i, int j){
+		float a = ((float) newAncho) / (imagenReal.getWidth() -1);
+		float b = ((float) newAlto) / (imagenReal.getHeight() - 1);
+		
+		float x = ((float)i) / a;
+		float y = ((float)j) / b;
+		
+		int minX = (int) Math.floor(x);
+		int minY = (int) Math.floor(y);
+		int maxX = minX + 1;
+		int maxY = minY + 1;
+		
+		double p = Math.abs(x - minX);
+		double q = Math.abs(y - minY);
+		
+//		System.out.println("i = " + i);
+//		System.out.println("j = " + j);
+//		System.out.println("a = " + a);
+//		System.out.println("b = " + b);
+//		System.out.println("x = " + x);
+//		System.out.println("y = " + y);
+//		System.out.println("minX = " + minX);
+//		System.out.println("minY = " + minY);
+//		System.out.println("maxX = " + maxX);
+//		System.out.println("maxY = " + maxY);
+//		System.out.println("p = " + p);
+//		System.out.println("q = " + q);
+		
+		Color pA = new Color(imagenReal.getRGB(minX, maxY));
+		Color pB = new Color(imagenReal.getRGB(maxX, maxY));
+		Color pC = new Color(imagenReal.getRGB(minX, minY));
+		Color pD = new Color(imagenReal.getRGB(maxX, minY));
+		
+		int valor = (int) (((float)pC.getRed()) + ((float)(pD.getRed() - pC.getRed())) * p + ((float)(pA.getRed() - pC.getRed())) * q + ((float)(pB.getRed() + pC.getRed() - pA.getRed() - pD.getRed())) * p * q);
+		
+		return new Color(valor,valor,valor);
+	}
+	
+	public void escalar(Boolean vecino, int newAncho, int newAlto){
+		BufferedImage outImage = new BufferedImage(newAncho,newAlto,BufferedImage.TYPE_INT_RGB);
+		Color colorAux;
+
+		
+		if(vecino == true){
+			System.out.println("Tipo: Vecino");
+			for(int i = 0; i < outImage.getWidth(); i++){
+		    	   for(int j = 0; j < outImage.getHeight(); j++){
+		    		   colorAux = vecino(newAncho,newAlto,i,j);
+		    		   outImage.setRGB(i,j,colorAux.getRGB());
+		    	   }
+		       }
+		}else{
+			System.out.println("Tipo: Bilineal");
+			for(int i = 0; i < outImage.getWidth(); i++){
+		    	   for(int j = 0; j < outImage.getHeight(); j++){
+		    		   colorAux = bilineal(newAncho,newAlto,i,j);
+		    		   outImage.setRGB(i,j,colorAux.getRGB());
+		    	   }
+		       }
+		}
+		
+		Imagenes newImagen = new Imagenes(this.api,outImage);
+		newImagen.empaquetarImagen();
+	}
+	
 	
 }
