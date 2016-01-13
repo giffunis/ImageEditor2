@@ -590,4 +590,5 @@ public class JToolBar2 extends JToolBar{
 		api.imagenes.get(pos).escalar(false,700,700);
 	}
 	
+	//----------------------------------------ROTACIONES------------------------------------------
 }
