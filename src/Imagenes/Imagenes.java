@@ -988,7 +988,11 @@ public class Imagenes{
 					x_ = i + xMin;
 					y_ = j + yMin;
 					pAux = transInversa(x_,y_,theta);
-					if(pAux.getX() < 0 || pAux.getY() < 0 || pAux.getX() >= imagenReal.getWidth() || pAux.getY() >= imagenReal.getHeight()){
+					
+//					System.out.println("x = " + pAux.getX());
+//					System.out.println("y = " + pAux.getY());
+					
+					if(pAux.getX() < 0 || pAux.getY() < 0 || pAux.getX() >= imagenReal.getWidth() - 1 || pAux.getY() >= imagenReal.getHeight() - 1){
 						colorAux = new Color(255,255,255);
 					}else{
 						colorAux = vecino2(pAux.getX(),pAux.getY());
@@ -1002,7 +1006,7 @@ public class Imagenes{
 					x_ = i + xMin;
 					y_ = j + yMin;
 					pAux = transInversa(x_,y_,theta);
-					if(pAux.getX() < 0 || pAux.getY() < 0 || pAux.getX() >= imagenReal.getWidth() || pAux.getY() >= imagenReal.getHeight()){
+					if(pAux.getX() < 0 || pAux.getY() < 0 || pAux.getX() >= imagenReal.getWidth() - 1 || pAux.getY() >= imagenReal.getHeight() - 1){
 						colorAux = new Color(255,255,255);
 					}else{
 						colorAux = vecino2(pAux.getX(),pAux.getY());
