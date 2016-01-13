@@ -605,7 +605,9 @@ public class JToolBar2 extends JToolBar{
 	
 	private void btnRotarActionPerformed(java.awt.event.ActionEvent evt) {
 		int pos = getImageFromInternalFrame();
-		api.imagenes.get(pos).rotacion(false,120);
+		int grados = 70;
+		int valorAux = 360 - grados;
+		api.imagenes.get(pos).rotacion(false,valorAux);
 	}
 	
 	

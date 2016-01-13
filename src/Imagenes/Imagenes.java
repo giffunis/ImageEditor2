@@ -866,19 +866,6 @@ public class Imagenes{
 		double p = Math.abs(x - minX);
 		double q = Math.abs(y - minY);
 		
-//		System.out.println("i = " + i);
-//		System.out.println("j = " + j);
-//		System.out.println("a = " + a);
-//		System.out.println("b = " + b);
-//		System.out.println("x = " + x);
-//		System.out.println("y = " + y);
-//		System.out.println("minX = " + minX);
-//		System.out.println("minY = " + minY);
-//		System.out.println("maxX = " + maxX);
-//		System.out.println("maxY = " + maxY);
-//		System.out.println("p = " + p);
-//		System.out.println("q = " + q);
-		
 		Color pA = new Color(imagenReal.getRGB(minX, maxY));
 		Color pB = new Color(imagenReal.getRGB(maxX, maxY));
 		Color pC = new Color(imagenReal.getRGB(minX, minY));
@@ -1009,7 +996,7 @@ public class Imagenes{
 					if(pAux.getX() < 0 || pAux.getY() < 0 || pAux.getX() >= imagenReal.getWidth() - 1 || pAux.getY() >= imagenReal.getHeight() - 1){
 						colorAux = new Color(255,255,255);
 					}else{
-						colorAux = vecino2(pAux.getX(),pAux.getY());
+						colorAux = bilineal2(pAux.getX(),pAux.getY());
 					}
 		    		outImage.setRGB(i,j,colorAux.getRGB());
 				}
@@ -1025,6 +1012,25 @@ public class Imagenes{
 		int x = (int)Math.round(x_);
 		int y = (int) Math.round(y_);
 		return new Color(imagenReal.getRGB(x, y));
+	}
+	
+	private Color bilineal2(double x, double y){		
+		int minX = (int) Math.floor(x);
+		int minY = (int) Math.floor(y);
+		int maxX = minX + 1;
+		int maxY = minY + 1;
+		
+		double p = Math.abs(x - minX);
+		double q = Math.abs(y - minY);
+		
+		Color pA = new Color(imagenReal.getRGB(minX, maxY));
+		Color pB = new Color(imagenReal.getRGB(maxX, maxY));
+		Color pC = new Color(imagenReal.getRGB(minX, minY));
+		Color pD = new Color(imagenReal.getRGB(maxX, minY));
+		
+		int valor = (int) (((float)pC.getRed()) + ((float)(pD.getRed() - pC.getRed())) * p + ((float)(pA.getRed() - pC.getRed())) * q + ((float)(pB.getRed() + pC.getRed() - pA.getRed() - pD.getRed())) * p * q);
+		
+		return new Color(valor,valor,valor);
 	}
 	
 }
