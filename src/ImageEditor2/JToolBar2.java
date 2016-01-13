@@ -40,6 +40,7 @@ public class JToolBar2 extends JToolBar{
 			espVer();
 			tras();
 			escalado();
+			rotar();
 		}
 		
 		// function to create a Button
@@ -591,4 +592,21 @@ public class JToolBar2 extends JToolBar{
 	}
 	
 	//----------------------------------------ROTACIONES------------------------------------------
+	
+	void rotar(){
+		createBtn("Rotar",Thread.currentThread().getContextClassLoader().getResource("Images/histogram1.png"));
+		btnItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRotarActionPerformed(evt);
+            }
+        });
+		add(btnItem);
+	}
+	
+	private void btnRotarActionPerformed(java.awt.event.ActionEvent evt) {
+		int pos = getImageFromInternalFrame();
+		api.imagenes.get(pos).rotacion(true,90);
+	}
+	
+	
 }

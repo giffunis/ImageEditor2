@@ -5,6 +5,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.GridBagLayout;
 import java.awt.Point;
+import java.awt.geom.Point2D;
 import java.awt.image.*;
 import java.io.File;
 import java.util.*;
@@ -125,8 +126,6 @@ public class Imagenes{
         label.addMouseListener(listImage);
 		panel = new JPanel(new GridBagLayout());
 		panel.add(label);
-//		ImagenesOnClick listImage = new ImagenesOnClick(this);
-//        panel.addMouseListener(listImage);
 	}
 	
 	private void initHistogramaAbsoluto(){  
@@ -142,8 +141,8 @@ public class Imagenes{
                 histo.set(aux.getRed(),histo.get(aux.getRed()) + 1);
             }
     	
-    	for(int i = 0; i < histo.size(); i++)
-    		System.out.println("color = " + i + "; cantidad de pixels: " + histo.get(i));
+//    	for(int i = 0; i < histo.size(); i++)
+//    		System.out.println("color = " + i + "; cantidad de pixels: " + histo.get(i));
 
     		
     }
@@ -917,5 +916,111 @@ public class Imagenes{
 		newImagen.empaquetarImagen();
 	}
 	
+	
+	private Point2D.Double transDirecta(int x, int y, int theta){
+		double nX, nY;
+		nX = Math.cos(Math.toRadians(theta))*x - Math.sin(Math.toRadians(theta))*y;
+		nY = Math.sin(Math.toRadians(theta))*x + Math.cos(Math.toRadians(theta))*y;
+		
+		return new Point2D.Double(nX,nY);
+	}
+	
+	private Point2D.Double transInversa(int x, int y, int theta){
+		double nX, nY;
+		nX = Math.cos(Math.toRadians(theta)) * x + Math.sin(Math.toRadians(theta))*y;
+		nY = (Math.sin(Math.toRadians(theta)) * x * -1) + Math.cos(Math.toRadians(theta))*y;
+		
+		return new Point2D.Double(nX,nY);
+	}
+	
+	private Vector<Integer> paralelogramo(int theta){
+		Vector<Integer> valores = new Vector<Integer>(0);
+		Vector<Point2D.Double> puntos = new Vector<Point2D.Double>(0);
+		
+		// Paso 1, rotar los puntos de las esquinas con la TD
+		puntos.addElement(transDirecta(0,0,theta)); // Punto de origen E
+		puntos.addElement(transDirecta(imagenReal.getWidth(),0,theta)); // Punto F
+		puntos.addElement(transDirecta(imagenReal.getWidth(),imagenReal.getHeight(),theta)); // Punto G
+		puntos.addElement(transDirecta(0,imagenReal.getHeight(),theta)); // Punto H
+		
+//		for(int i = 0; i < puntos.size(); i++){
+//			System.out.println("Punto["+i+"]= " + puntos.get(i));
+//		}
+		
+		// Paso 2, Determinar los valores para el paralelogramo
+		double xMin = 999999, xMax = 0, yMin = 999999, yMax = 0;
+		
+		for(int i = 0; i < puntos.size(); i++){
+			if(puntos.get(i).getX() <= xMin)
+				xMin = puntos.get(i).getX();
+			if(puntos.get(i).getX() > xMax)
+				xMax = puntos.get(i).getX();
+			if(puntos.get(i).getY() <= yMin)
+				yMin = puntos.get(i).getY();
+			if(puntos.get(i).getY() > yMax)
+				yMax = puntos.get(i).getY();
+		}
+		
+		valores.addElement((int) Math.round(xMin));
+		valores.addElement((int) Math.round(yMin));
+		valores.addElement((int) Math.round(xMax));
+		valores.addElement((int) Math.round(yMax));
+		
+		return valores;
+	}
+	
+	public void rotacion(Boolean vecino, int theta){
+		Vector<Integer> valores = paralelogramo(theta);
+		int xMin = valores.get(0);
+		int yMin = valores.get(1);
+		int ancho = Math.abs(valores.get(0) - valores.get(2));
+		int alto = Math.abs(valores.get(1) - valores.get(3));
+		BufferedImage outImage = new BufferedImage(ancho,alto,BufferedImage.TYPE_INT_RGB);
+		System.out.println("ancho = " + ancho);
+		System.out.println("alto = " + alto);
+		int x_, y_;
+		Point2D.Double pAux;
+		Color colorAux;
+		
+		if(vecino == true){
+			for(int i = 0; i < outImage.getWidth(); i++){
+				for(int j = 0; j < outImage.getHeight(); j++){
+					x_ = i + xMin;
+					y_ = j + yMin;
+					pAux = transInversa(x_,y_,theta);
+					if(pAux.getX() < 0 || pAux.getY() < 0 || pAux.getX() >= imagenReal.getWidth() || pAux.getY() >= imagenReal.getHeight()){
+						colorAux = new Color(255,255,255);
+					}else{
+						colorAux = vecino2(pAux.getX(),pAux.getY());
+					}
+		    		outImage.setRGB(i,j,colorAux.getRGB());
+				}
+			}
+		}else{
+			for(int i = 0; i < outImage.getWidth(); i++){
+				for(int j = 0; j < outImage.getHeight(); j++){
+					x_ = i + xMin;
+					y_ = j + yMin;
+					pAux = transInversa(x_,y_,theta);
+					if(pAux.getX() < 0 || pAux.getY() < 0 || pAux.getX() >= imagenReal.getWidth() || pAux.getY() >= imagenReal.getHeight()){
+						colorAux = new Color(255,255,255);
+					}else{
+						colorAux = vecino2(pAux.getX(),pAux.getY());
+					}
+		    		outImage.setRGB(i,j,colorAux.getRGB());
+				}
+			}
+		}
+		
+		Imagenes newImagen = new Imagenes(this.api,outImage);
+		newImagen.empaquetarImagen();
+	}
+	
+	
+	private Color vecino2(double x_, double y_){
+		int x = (int)Math.round(x_);
+		int y = (int) Math.round(y_);
+		return new Color(imagenReal.getRGB(x, y));
+	}
 	
 }
