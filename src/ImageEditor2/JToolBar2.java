@@ -1,6 +1,7 @@
 package ImageEditor2;
 
 
+import java.awt.BorderLayout;
 import java.awt.GridLayout;
 import java.awt.Point;
 import java.net.URL;
@@ -12,6 +13,7 @@ import TramosLineal.MyFrame2;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 
 
 @SuppressWarnings("serial")
@@ -41,6 +43,7 @@ public class JToolBar2 extends JToolBar{
 			tras();
 			escalado();
 			rotar();
+			rotarPintar();
 		}
 		
 		// function to create a Button
@@ -605,10 +608,139 @@ public class JToolBar2 extends JToolBar{
 	
 	private void btnRotarActionPerformed(java.awt.event.ActionEvent evt) {
 		int pos = getImageFromInternalFrame();
-		int grados = 70;
-		int valorAux = 360 - grados;
-		api.imagenes.get(pos).rotacion(false,valorAux);
+		
+		JFrame marco = new JFrame("Rotar");
+		JPanel panelI = new JPanel();
+		JPanel panelD = new JPanel();
+		JPanel panelC = new JPanel();
+		JLabel lGrados = new JLabel("grados: ");
+		JLabel lVecino = new JLabel("Metodo:");
+		JTextField tGrados = new JTextField(2);
+		JButton btnAccept = new JButton("Aceptar");
+		JButton btnCancel = new JButton("Cancelar");
+		JRadioButton vecinoButton = new JRadioButton("Vecino más Próximo");
+	    vecinoButton.setMnemonic(KeyEvent.VK_P);
+	    vecinoButton.setSelected(true);
+	    JRadioButton bilinealButton = new JRadioButton("Bilineal");
+	    bilinealButton.setMnemonic(KeyEvent.VK_P);
+	    bilinealButton.setSelected(false);
+	  //Group the radio buttons.
+	    ButtonGroup group = new ButtonGroup();
+	    group.add(vecinoButton);
+	    group.add(bilinealButton);
+	    
+	    
+		panelI.setLayout( new GridLayout(2,1));
+		panelD.setLayout( new GridLayout(3,1));
+		panelC.setLayout( new GridLayout(1,2));
+		panelI.add(lGrados);
+		panelI.add(tGrados);
+		panelD.add(lVecino);
+		panelD.add(vecinoButton);
+		panelD.add(bilinealButton);
+		panelC.add(btnAccept);
+		panelC.add(btnCancel);
+		panelI.setVisible(true);
+		panelD.setVisible(true);
+		panelC.setVisible(true);
+		marco.add(panelI,BorderLayout.WEST);
+		marco.add(panelD,BorderLayout.EAST);
+		marco.add(panelC,BorderLayout.SOUTH);
+		marco.pack();
+		marco.setVisible(true);
+		
+		btnAccept.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				try{
+					int grados = Integer.parseInt(tGrados.getText());
+					marco.dispose();
+					int valorAux = 360 - grados;
+					boolean vecino = true;
+					if(bilinealButton.isSelected() == true)
+						vecino = false;
+					System.out.println("vecino:" + vecino);
+					api.imagenes.get(pos).rotacion(vecino,valorAux);					
+				} catch(Exception a){
+					//System.out.println("No ha introducido ningún valor");
+					a.printStackTrace();
+				}
+			}
+		});
+		
+		btnCancel.addActionListener(new ActionListener() {	
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				try {
+					marco.dispose();
+				} catch (Exception e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			}
+		});
+		
 	}
 	
+	void rotarPintar(){
+		createBtn("Rotar y Pintar",Thread.currentThread().getContextClassLoader().getResource("Images/histogram1.png"));
+		btnItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRotarPintarActionPerformed(evt);
+            }
+        });
+		add(btnItem);
+	}
+	
+	private void btnRotarPintarActionPerformed(java.awt.event.ActionEvent evt) {
+		int pos = getImageFromInternalFrame();
+		
+		JFrame marco = new JFrame("Rotar y pintar");
+		JPanel panel = new JPanel();
+		JLabel label = new JLabel("grados: ");
+		JTextField factor = new JTextField(2);
+		JButton btnAccept = new JButton("Aceptar");
+		JButton btnCancel = new JButton("Cancelar");
+		//final int [] nTramos = new int [1];
+		
+		panel.setLayout( new GridLayout(2,2));
+		panel.add(label);
+		panel.add(factor);
+		panel.add(btnAccept);
+		panel.add(btnCancel);
+		panel.setVisible(true);
+		marco.add(panel);
+		marco.pack();
+		marco.setVisible(true);
+		
+		btnAccept.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				try{
+					int grados = Integer.parseInt(factor.getText());
+					marco.dispose();
+					int valorAux = 360 - grados;
+					api.imagenes.get(pos).rotacionMala(valorAux);
+					
+				} catch(Exception a){
+					//System.out.println("No ha introducido ningún valor");
+					a.printStackTrace();
+				}
+			}
+		});
+		
+		btnCancel.addActionListener(new ActionListener() {	
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				try {
+					marco.dispose();
+				} catch (Exception e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			}
+		});
+		
+	}
 	
 }

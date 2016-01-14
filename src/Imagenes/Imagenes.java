@@ -975,10 +975,6 @@ public class Imagenes{
 					x_ = i + xMin;
 					y_ = j + yMin;
 					pAux = transInversa(x_,y_,theta);
-					
-//					System.out.println("x = " + pAux.getX());
-//					System.out.println("y = " + pAux.getY());
-					
 					if(pAux.getX() < 0 || pAux.getY() < 0 || pAux.getX() >= imagenReal.getWidth() - 1 || pAux.getY() >= imagenReal.getHeight() - 1){
 						colorAux = new Color(255,255,255);
 					}else{
@@ -1031,6 +1027,53 @@ public class Imagenes{
 		int valor = (int) (((float)pC.getRed()) + ((float)(pD.getRed() - pC.getRed())) * p + ((float)(pA.getRed() - pC.getRed())) * q + ((float)(pB.getRed() + pC.getRed() - pA.getRed() - pD.getRed())) * p * q);
 		
 		return new Color(valor,valor,valor);
+	}
+	
+	
+	public void rotacionMala(int theta){
+		Vector<Integer> valores = paralelogramo(theta);
+		int xMin = valores.get(0);
+		int yMin = valores.get(1);
+		int xMax = valores.get(2);
+		int yMax = valores.get(3);
+		int ancho = Math.abs(valores.get(0) - valores.get(2));
+		int alto = Math.abs(valores.get(1) - valores.get(3));
+		BufferedImage outImage = new BufferedImage(ancho,alto,BufferedImage.TYPE_INT_RGB);
+		System.out.println("ancho = " + ancho);
+		System.out.println("alto = " + alto);
+		System.out.println("xMin = " + xMin);
+		System.out.println("xMax = " + xMax);
+		System.out.println("yMin = " + yMin);
+		System.out.println("yMax = " + yMax);
+		int x_, y_;
+		Point2D.Double pAux;
+		Color colorAux;
+		
+		//Pintar todo el lienzo
+		for(int i = 0; i < outImage.getWidth(); i++){
+			for(int j = 0; j < outImage.getHeight(); j++){
+				colorAux = new Color(255,255,255);
+	    		outImage.setRGB(i,j,colorAux.getRGB());
+			}
+		}
+		
+		for(int i = 0; i < imagenReal.getWidth(); i++){
+			for(int j = 0; j < imagenReal.getHeight(); j++){
+				pAux = transDirecta(i,j,theta);
+				colorAux = new Color(imagenReal.getRGB(i,j));
+				System.out.println("x = " + pAux.getX());
+				System.out.println("y = " + pAux.getY());
+				x_ = (int) Math.abs(Math.round(pAux.getX()) - (ancho -1));
+				y_ = (int) Math.abs(Math.round(pAux.getY()) - (alto - 1));
+				System.out.println("x_ = " + x_);
+				System.out.println("y_ = " + y_);
+	    		outImage.setRGB(x_,y_,colorAux.getRGB());
+			}
+		}
+
+		
+		Imagenes newImagen = new Imagenes(this.api,outImage);
+		newImagen.empaquetarImagen();
 	}
 	
 }
