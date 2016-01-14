@@ -591,7 +591,104 @@ public class JToolBar2 extends JToolBar{
 	
 	private void btnEscaladoActionPerformed(java.awt.event.ActionEvent evt) {
 		int pos = getImageFromInternalFrame();
-		api.imagenes.get(pos).escalar(false,700,700);
+//		api.imagenes.get(pos).escalar(false,700,700);
+		
+		
+		JFrame marco = new JFrame("Escalar");
+		JPanel panelN = new JPanel();
+		JPanel panelL = new JPanel();
+		JPanel panelD = new JPanel();
+		JPanel panelS = new JPanel();
+		JLabel label = new JLabel("Tamaño: " + api.imagenes.get(pos).getImageSize());
+		JLabel label2 = new JLabel("Elija el método de interpolación");
+		JRadioButton vecinoButton = new JRadioButton("Vecino más Próximo");
+	    vecinoButton.setMnemonic(KeyEvent.VK_P);
+	    vecinoButton.setSelected(true);
+	    JRadioButton bilinealButton = new JRadioButton("Bilineal");
+	    bilinealButton.setMnemonic(KeyEvent.VK_P);
+	    bilinealButton.setSelected(false);
+	  //Group the radio buttons.
+	    ButtonGroup group = new ButtonGroup();
+	    group.add(vecinoButton);
+	    group.add(bilinealButton);
+		
+		JTextField ancho = new JTextField("Ancho");
+		JTextField alto = new JTextField("Alto");
+		JRadioButton porButton = new JRadioButton("%");
+	    porButton.setMnemonic(KeyEvent.VK_P);
+	    porButton.setSelected(true);
+	    JRadioButton pxButton = new JRadioButton("Pixels");
+	    pxButton.setMnemonic(KeyEvent.VK_P);
+	    pxButton.setSelected(false);
+	  //Group the radio buttons.
+	    ButtonGroup group2 = new ButtonGroup();
+	    group2.add(porButton);
+	    group2.add(pxButton);
+		JButton btnAccept = new JButton("Aceptar");
+		JButton btnCancel = new JButton("Cancelar");
+		//final int [] nTramos = new int [1];
+		
+		panelD.setLayout( new GridLayout(2,1));
+		panelD.add(porButton);
+		panelD.add(pxButton);
+		panelL.setLayout( new GridLayout(2,1));
+		panelL.add(ancho);
+		panelL.add(alto);
+		panelN.setLayout( new GridLayout(2,2));
+		panelN.add(label);
+		panelN.add(label2);
+		panelN.add(vecinoButton);
+		panelN.add(bilinealButton);
+		panelN.setVisible(true);
+		panelS.setLayout( new GridLayout(1,2));
+		panelS.add(btnAccept);
+		panelS.add(btnCancel);
+		panelS.setVisible(true);
+		marco.add(panelD,BorderLayout.EAST);
+		marco.add(panelL,BorderLayout.WEST);
+		marco.add(panelN,BorderLayout.NORTH);
+		marco.add(panelS,BorderLayout.SOUTH);
+		marco.pack();
+		marco.setVisible(true);
+		
+		btnAccept.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				try{
+					int width = Integer.parseInt(ancho.getText());
+					int height = Integer.parseInt(ancho.getText());
+					marco.dispose();
+					boolean vecino = true;
+					if(bilinealButton.isSelected() == true)
+						vecino = false;
+					System.out.println("vecino:" + vecino);
+					if(porButton.isSelected() == true){
+						width = (int) (((double)(api.imagenes.get(pos).imagenReal.getWidth() * width)) / 100);
+						height = (int) (((double)(api.imagenes.get(pos).imagenReal.getHeight() * height)) / 100);
+						System.out.println("%");
+						System.out.println("ancho = " + width);
+						System.out.println("alto = "+ height );
+					}
+					api.imagenes.get(pos).escalar(vecino,width,height);					
+				} catch(Exception a){
+					//System.out.println("No ha introducido ningún valor");
+					a.printStackTrace();
+				}
+			}
+		});
+		
+		btnCancel.addActionListener(new ActionListener() {	
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				try {
+					marco.dispose();
+				} catch (Exception e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			}
+		});
+		
 	}
 	
 	//----------------------------------------ROTACIONES------------------------------------------
