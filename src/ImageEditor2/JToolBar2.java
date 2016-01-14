@@ -656,13 +656,15 @@ public class JToolBar2 extends JToolBar{
 			public void actionPerformed(ActionEvent e) {
 				try{
 					int width = Integer.parseInt(ancho.getText());
-					int height = Integer.parseInt(ancho.getText());
+					int height = Integer.parseInt(alto.getText());
 					marco.dispose();
 					boolean vecino = true;
 					if(bilinealButton.isSelected() == true)
 						vecino = false;
 					System.out.println("vecino:" + vecino);
 					if(porButton.isSelected() == true){
+						System.out.println("ancho = " + width);
+						System.out.println("alto = "+ height );
 						width = (int) (((double)(api.imagenes.get(pos).imagenReal.getWidth() * width)) / 100);
 						height = (int) (((double)(api.imagenes.get(pos).imagenReal.getHeight() * height)) / 100);
 						System.out.println("%");
