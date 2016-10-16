@@ -835,13 +835,13 @@ public class Imagenes{
 	}
 	
 	private Color vecino(int newAncho, int newAlto, int i, int j){
-		float a = ((float) newAncho) / (imagenReal.getWidth() -1);
-		float b = ((float) newAlto) / (imagenReal.getHeight() - 1);
+		float a = ((float) newAncho) / imagenReal.getWidth();
+		float b = ((float) newAlto) / imagenReal.getHeight();
 		
 		int x = Math.round(((float)i) / a);
 		int y = Math.round(((float)j) / b);
 		
-//		System.out.println("a = " + a);
+		System.out.println("a = " + a);
 //		System.out.println("b = " + b);
 //		System.out.println("i = " + i);
 //		System.out.println("j = " + j);
@@ -852,8 +852,8 @@ public class Imagenes{
 	}
 	
 	private Color bilineal(int newAncho, int newAlto, int i, int j){
-		float a = ((float) newAncho) / (imagenReal.getWidth() -1);
-		float b = ((float) newAlto) / (imagenReal.getHeight() - 1);
+		float a = ((float) newAncho) / imagenReal.getWidth();
+		float b = ((float) newAlto) / imagenReal.getHeight();
 		
 		float x = ((float)i) / a;
 		float y = ((float)j) / b;
@@ -926,9 +926,9 @@ public class Imagenes{
 		
 		// Paso 1, rotar los puntos de las esquinas con la TD
 		puntos.addElement(transDirecta(0,0,theta)); // Punto de origen E
-		puntos.addElement(transDirecta(imagenReal.getWidth(),0,theta)); // Punto F
-		puntos.addElement(transDirecta(imagenReal.getWidth(),imagenReal.getHeight(),theta)); // Punto G
-		puntos.addElement(transDirecta(0,imagenReal.getHeight(),theta)); // Punto H
+		puntos.addElement(transDirecta(imagenReal.getWidth()-1,0,theta)); // Punto F
+		puntos.addElement(transDirecta(imagenReal.getWidth()-1,imagenReal.getHeight()-1,theta)); // Punto G
+		puntos.addElement(transDirecta(0,imagenReal.getHeight()-1,theta)); // Punto H
 		
 //		for(int i = 0; i < puntos.size(); i++){
 //			System.out.println("Punto["+i+"]= " + puntos.get(i));
@@ -960,14 +960,15 @@ public class Imagenes{
 		Vector<Integer> valores = paralelogramo(theta);
 		int xMin = valores.get(0);
 		int yMin = valores.get(1);
-		int ancho = Math.abs(valores.get(0) - valores.get(2));
-		int alto = Math.abs(valores.get(1) - valores.get(3));
+		int ancho = Math.abs(valores.get(0) - valores.get(2)) +1;
+		int alto = Math.abs(valores.get(1) - valores.get(3)) +1;
 		BufferedImage outImage = new BufferedImage(ancho,alto,BufferedImage.TYPE_INT_RGB);
 		System.out.println("ancho = " + ancho);
 		System.out.println("alto = " + alto);
 		int x_, y_;
 		Point2D.Double pAux;
 		Color colorAux;
+		int contador = 0;
 		
 		if(vecino == true){
 			for(int i = 0; i < outImage.getWidth(); i++){
@@ -977,6 +978,7 @@ public class Imagenes{
 					pAux = transInversa(x_,y_,theta);
 					if(pAux.getX() < 0 || pAux.getY() < 0 || pAux.getX() >= imagenReal.getWidth() - 1 || pAux.getY() >= imagenReal.getHeight() - 1){
 						colorAux = new Color(255,255,255);
+						contador++;
 					}else{
 						colorAux = vecino2(pAux.getX(),pAux.getY());
 					}
@@ -991,6 +993,7 @@ public class Imagenes{
 					pAux = transInversa(x_,y_,theta);
 					if(pAux.getX() < 0 || pAux.getY() < 0 || pAux.getX() >= imagenReal.getWidth() - 1 || pAux.getY() >= imagenReal.getHeight() - 1){
 						colorAux = new Color(255,255,255);
+						contador++;
 					}else{
 						colorAux = bilineal2(pAux.getX(),pAux.getY());
 					}
@@ -1001,6 +1004,7 @@ public class Imagenes{
 		
 		Imagenes newImagen = new Imagenes(this.api,outImage);
 		newImagen.empaquetarImagen();
+		newImagen.histo.set(255, newImagen.histo.get(255)-contador);
 	}
 	
 	
@@ -1032,12 +1036,13 @@ public class Imagenes{
 	
 	public void rotacionMala(int theta){
 		Vector<Integer> valores = paralelogramo(theta);
-		int xMin = valores.get(0);
-		int yMin = valores.get(1);
-		int xMax = valores.get(2);
-		int yMax = valores.get(3);
-		int ancho = Math.abs(valores.get(0) - valores.get(2));
-		int alto = Math.abs(valores.get(1) - valores.get(3));
+		Vector<Double> valores2 = paralelogramo2(theta);
+		double xMin = valores2.get(0);
+		double yMin = valores2.get(1);
+		double xMax = valores2.get(2);
+		double yMax = valores2.get(3);
+		int ancho = Math.abs(valores.get(0) - valores.get(2)) +1;
+		int alto = Math.abs(valores.get(1) - valores.get(3)) +1;
 		BufferedImage outImage = new BufferedImage(ancho,alto,BufferedImage.TYPE_INT_RGB);
 		System.out.println("ancho = " + ancho);
 		System.out.println("alto = " + alto);
@@ -1045,7 +1050,7 @@ public class Imagenes{
 		System.out.println("xMax = " + xMax);
 		System.out.println("yMin = " + yMin);
 		System.out.println("yMax = " + yMax);
-		int x_, y_;
+		int i_, j_;
 		Point2D.Double pAux;
 		Color colorAux;
 		
@@ -1057,17 +1062,17 @@ public class Imagenes{
 			}
 		}
 		
-		for(int i = 0; i < imagenReal.getWidth(); i++){
-			for(int j = 0; j < imagenReal.getHeight(); j++){
-				pAux = transDirecta(i,j,theta);
-				colorAux = new Color(imagenReal.getRGB(i,j));
-				System.out.println("x = " + pAux.getX());
-				System.out.println("y = " + pAux.getY());
-				x_ = (int) Math.abs(Math.round(pAux.getX()) - (ancho -1));
-				y_ = (int) Math.abs(Math.round(pAux.getY()) - (alto - 1));
-				System.out.println("x_ = " + x_);
-				System.out.println("y_ = " + y_);
-	    		outImage.setRGB(x_,y_,colorAux.getRGB());
+		for(int x = 0; x < imagenReal.getWidth(); x++){
+			for(int y = 0; y < imagenReal.getHeight(); y++){
+				pAux = transDirecta(x,y,theta);
+				colorAux = new Color(imagenReal.getRGB(x,y));
+				System.out.println("x' = " + pAux.getX());
+				System.out.println("y' = " + pAux.getY());
+				i_ = (int) Math.round(pAux.getX() - xMin);
+				j_ = (int) Math.round(pAux.getY() - yMin);
+				System.out.println("i = " + i_);
+				System.out.println("j = " + j_);
+	    		outImage.setRGB(i_,j_,colorAux.getRGB());
 			}
 		}
 
@@ -1075,5 +1080,42 @@ public class Imagenes{
 		Imagenes newImagen = new Imagenes(this.api,outImage);
 		newImagen.empaquetarImagen();
 	}
+	
+	private Vector<Double> paralelogramo2(int theta){
+		Vector<Double> valores = new Vector<Double>(0);
+		Vector<Point2D.Double> puntos = new Vector<Point2D.Double>(0);
+		
+		// Paso 1, rotar los puntos de las esquinas con la TD
+		puntos.addElement(transDirecta(0,0,theta)); // Punto de origen E
+		puntos.addElement(transDirecta(imagenReal.getWidth() - 1,0,theta)); // Punto F
+		puntos.addElement(transDirecta(imagenReal.getWidth() -1,imagenReal.getHeight()-1,theta)); // Punto G
+		puntos.addElement(transDirecta(0,imagenReal.getHeight()-1,theta)); // Punto H
+		
+//		for(int i = 0; i < puntos.size(); i++){
+//			System.out.println("Punto["+i+"]= " + puntos.get(i));
+//		}
+		
+		// Paso 2, Determinar los valores para el paralelogramo
+		double xMin = 999999, xMax = 0, yMin = 999999, yMax = 0;
+		
+		for(int i = 0; i < puntos.size(); i++){
+			if(puntos.get(i).getX() <= xMin)
+				xMin = puntos.get(i).getX();
+			if(puntos.get(i).getX() > xMax)
+				xMax = puntos.get(i).getX();
+			if(puntos.get(i).getY() <= yMin)
+				yMin = puntos.get(i).getY();
+			if(puntos.get(i).getY() > yMax)
+				yMax = puntos.get(i).getY();
+		}
+		
+		valores.addElement(xMin);
+		valores.addElement(yMin);
+		valores.addElement(xMax);
+		valores.addElement(yMax);
+		
+		return valores;
+	}
+	
 	
 }
